@@ -9,10 +9,13 @@
     "web": "expo start --web"
   },
   "dependencies": {
-    "expo": "~53.0.20",
+    "@gorhom/bottom-sheet": "^5",
+    "expo": "^53.0.22",
     "expo-status-bar": "~2.2.3",
     "react": "19.0.0",
-    "react-native": "0.79.5"
+    "react-native": "0.79.5",
+    "react-native-gesture-handler": "~2.24.0",
+    "react-native-reanimated": "~3.17.4"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
@@ -20,5 +23,5 @@
     "typescript": "~5.8.3"
   },
   "private": true,
-  "packageManager": "yarn@4.9.3"
+  "packageManager": "yarn@4.9.4"
 }
