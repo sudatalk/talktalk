@@ -10,18 +10,18 @@ const JoinTalkModalTeam = (props: Props) => {
   const { leftTeam, rightTeam } = props;
 
   return (
-    <View style={{ flex: 0.35, gap: 15 }}>
+    <View style={styles.container}>
       <Text white h3>
         팀 선택
       </Text>
-      <View style={styles.container}>
-        <View style={styles.teamContainer}>
-          <View style={styles.teamWrapper}>
+      <View style={styles.teamContainer}>
+        <View style={styles.teamContentContainer}>
+          <View style={styles.teamContentWrapper}>
             <Text>{leftTeam}</Text>
           </View>
         </View>
-        <View style={styles.teamContainer}>
-          <View style={styles.teamWrapper}>
+        <View style={styles.teamContentContainer}>
+          <View style={styles.teamContentWrapper}>
             <Text>{rightTeam}</Text>
           </View>
         </View>
@@ -34,12 +34,16 @@ export default JoinTalkModalTeam;
 
 const styles = StyleSheet.create({
   container: {
+    flex: 0.35,
+    gap: 15,
+  },
+  teamContainer: {
     flexDirection: "row",
 
     alignItems: "center",
     justifyContent: "center",
   },
-  teamContainer: {
+  teamContentContainer: {
     width: "100%",
     flex: 0.45,
 
@@ -48,7 +52,7 @@ const styles = StyleSheet.create({
 
     flexDirection: "row",
   },
-  teamWrapper: {
+  teamContentWrapper: {
     flex: 0.9,
     height: 40,
 
