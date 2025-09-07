@@ -1,12 +1,18 @@
-import { StyleSheet, View } from "react-native";
+import { Image, StyleSheet, View } from "react-native";
 import JoinTalkModalHeader from "./JoinTalkModalHeader";
 import JoinTalkModalButton from "./JoinTalkModalButton";
+import Text from "@/components/Text";
+import JoinTalkModalProfileImage from "./JoinTalkModalProfileImage";
 
 const JoinTalkModalContent = () => {
   return (
     <View style={styles.container}>
       <JoinTalkModalHeader />
-      <View style={styles.bodyContainer}></View>
+      <View style={styles.bodyContainer}>
+        <JoinTalkModalProfileImage selectedIndex={0} />
+        <View>닉네임 영역</View>
+        <View>팀 영역</View>
+      </View>
       <View style={styles.footerContainer}>
         <JoinTalkModalButton handleSubmit={() => {}} />
       </View>
