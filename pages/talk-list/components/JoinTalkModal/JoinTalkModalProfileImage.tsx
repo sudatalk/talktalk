@@ -13,7 +13,7 @@ const JoinTalkModalProfileImage = () => {
 
   useEffect(() => {
     (async () => {
-      const response = await Promise.all(Array.from({ length: 6 }, (_, i) => axios.get(`https://picsum.photos/100/100?random=${Date.now()}-${i}`).then((res) => res.request.responseURL)));
+      const response = await Promise.all(Array.from({ length: 6 }, (_, i) => axios.get(`https://picsum.photos/60?random=${Date.now()}-${i}`).then((res) => res.request.responseURL)));
 
       setList(response);
       setIsLoading(false);
