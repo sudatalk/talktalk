@@ -71,11 +71,11 @@ const styles = StyleSheet.create({
   },
 
   image: {
-    width: 50,
-    height: 50,
+    width: 55,
+    height: 55,
 
     borderRadius: 25,
-    borderWidth: 3,
+    borderWidth: 5,
   },
 
   selected: {
