@@ -5249,6 +5249,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-hook-form@npm:^7.62.0":
+  version: 7.62.0
+  resolution: "react-hook-form@npm:7.62.0"
+  peerDependencies:
+    react: ^16.8.0 || ^17 || ^18 || ^19
+  checksum: 10c0/451a25a2ddf07be14f690d2ad3f2f970e0b933fd059ef141c6da9e19d0566d739e9d5cc9c482e3533f3fd01d97e658b896a01ce45a1259ad7b0d4638ba0112c6
+  languageName: node
+  linkType: hard
+
 "react-is@npm:^16.7.0":
   version: 16.13.1
   resolution: "react-is@npm:16.13.1"
@@ -6051,6 +6060,7 @@ __metadata:
     expo: "npm:^53.0.22"
     expo-status-bar: "npm:~2.2.3"
     react: "npm:19.0.0"
+    react-hook-form: "npm:^7.62.0"
     react-native: "npm:0.79.5"
     react-native-element-dropdown: "npm:^2.12.4"
     react-native-gesture-handler: "npm:~2.24.0"
