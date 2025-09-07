@@ -1,12 +1,9 @@
 import { StyleSheet, View } from "react-native";
-
-import { TextInput } from "react-native-gesture-handler";
-
 import CreateTalkModalHeader from "./CreateTalkModalHeader";
 import Modal from "@/components/Modal";
-import Divider from "@/components/Divider";
 import Text from "@/components/Text";
 import CreateTalkModalTitle from "./CreateTalkModalTitle";
+import CreateTalkModalTeam from "../CreateTalkModalTeam";
 
 type Props = {
   isOpen: boolean;
@@ -22,14 +19,7 @@ const CreateTalkModal = (props: Props) => {
         <CreateTalkModalHeader />
         <View style={styles.bodyContainer}>
           <CreateTalkModalTitle />
-          <View
-            style={{
-              flex: 0.3,
-              backgroundColor: "yellow",
-            }}
-          >
-            팀 영역
-          </View>
+          <CreateTalkModalTeam />
           <View
             style={{
               flex: 0.3,
@@ -54,6 +44,8 @@ export default CreateTalkModal;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+
+    padding: 10,
   },
 
   headerContainer: {
@@ -69,7 +61,6 @@ const styles = StyleSheet.create({
     flex: 0.15,
 
     alignItems: "center",
-
-    paddingTop: 10,
+    justifyContent: "center",
   },
 });
