@@ -38,9 +38,8 @@ const JoinTalkModalProfileImage = () => {
           const isSelected = value === url;
 
           return (
-            <Pressable onPress={() => handleClick(url)}>
+            <Pressable onPress={() => handleClick(url)} key={index}>
               <Image
-                key={index}
                 source={{
                   uri: url,
                 }}
