@@ -1,10 +1,11 @@
 import Divider from "@/components/Divider";
-import { StyleSheet, TextInput, View } from "react-native";
+import TextInput from "@/components/TextInput";
+import { StyleSheet, View } from "react-native";
 
 const CreateTalkModalTitle = () => {
   return (
     <View style={styles.container}>
-      <TextInput placeholder="토론방의 제목을 입력해주세요" placeholderTextColor="#808080" style={styles.textInput} />
+      <TextInput type1 placeholder="토론방의 제목을 입력해주세요" placeholderTextColor="#808080" style={styles.textInput} />
       <Divider type1 />
     </View>
   );
