@@ -11,7 +11,7 @@ const CreateTalkModal = (props: Props) => {
 
   return (
     <Modal isOpen={isOpen} handleClose={handleClose}>
-      {isOpen && <CreateTalkModalContent />}
+      {isOpen && <CreateTalkModalContent handleClose={handleClose} />}
     </Modal>
   );
 };

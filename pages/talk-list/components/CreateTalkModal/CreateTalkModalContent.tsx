@@ -7,8 +7,15 @@ import { FormProvider, useForm } from "react-hook-form";
 import { CREATE_TALK_FORM_DEFAULT_VALUES } from "../../constants/createTalkForm";
 import { ON_SUBMIT } from "@/constants/form";
 import CreateTalkModalButton from "./CreateTalkModalButton";
+import { postRoom } from "@/services/room";
 
-const CreateTalkModalContent = () => {
+type Props = {
+  handleClose: () => void;
+};
+
+const CreateTalkModalContent = (props: Props) => {
+  const { handleClose } = props;
+
   const form = useForm({
     defaultValues: CREATE_TALK_FORM_DEFAULT_VALUES,
     mode: ON_SUBMIT,
@@ -16,8 +23,15 @@ const CreateTalkModalContent = () => {
   });
 
   const handleSubmit = form.handleSubmit(
-    (value) => {
-      console.log("value : ", value);
+    async (value) => {
+      await postRoom({
+        title: value.title,
+        leftTeam: value.leftTeam,
+        rightTeam: value.rightTeam,
+        duration: +value.duration,
+      });
+
+      handleClose();
     },
     (error) => {
       console.log("error : ", error);
