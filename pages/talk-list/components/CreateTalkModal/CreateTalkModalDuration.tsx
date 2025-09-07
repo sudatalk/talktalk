@@ -14,7 +14,7 @@ const DURATION_SELECT_OPTIONS: SELECT_OPTIONS[] = [
   { label: "60분", value: "60" },
 ];
 
-const REQUIRED_ERROR_MESSAGE = "소요시간을 입력해주세요";
+const REQUIRED_ERROR_MESSAGE = "시간제한을 선택해주세요";
 
 const CreateTalkModalDuration = () => {
   const {

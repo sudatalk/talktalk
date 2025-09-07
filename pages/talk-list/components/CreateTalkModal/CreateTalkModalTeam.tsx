@@ -2,7 +2,7 @@ import Text from "@/components/Text";
 import TextInput from "@/components/TextInput";
 import { useController } from "react-hook-form";
 import { StyleSheet, View } from "react-native";
-import { CREATE_TALK_FORM_PATH } from "../constants/createTalkForm";
+import { CREATE_TALK_FORM_PATH } from "../../constants/createTalkForm";
 
 const MAX_LENGTH = 8;
 

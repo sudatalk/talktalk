@@ -1,9 +1,9 @@
 import { StyleSheet, View } from "react-native";
 import CreateTalkModalHeader from "./CreateTalkModalHeader";
 import CreateTalkModalTitle from "./CreateTalkModalTitle";
-import CreateTalkModalTeam from "../CreateTalkModalTeam";
+import CreateTalkModalTeam from "./CreateTalkModalTeam";
 import CreateTalkModalDuration from "./CreateTalkModalDuration";
-import { FieldErrors, FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { CREATE_TALK_FORM_DEFAULT_VALUES } from "../../constants/createTalkForm";
 import { ON_SUBMIT } from "@/constants/form";
 import CreateTalkModalButton from "./CreateTalkModalButton";
@@ -25,12 +25,14 @@ const CreateTalkModalContent = (props: Props) => {
 
   const handleSubmit = form.handleSubmit(
     async (value) => {
-      await postRoom({
+      const response = await postRoom({
         title: value.title,
         leftTeam: value.leftTeam,
         rightTeam: value.rightTeam,
         duration: +value.duration,
       });
+
+      console.log("response : ", response.data);
 
       // TODO : 목록 조회 API 리패칭
       // TODO : 채팅방으로 바로 입장하게 할지 고민 필요
