@@ -3,11 +3,12 @@ import CreateTalkModalHeader from "./CreateTalkModalHeader";
 import CreateTalkModalTitle from "./CreateTalkModalTitle";
 import CreateTalkModalTeam from "../CreateTalkModalTeam";
 import CreateTalkModalDuration from "./CreateTalkModalDuration";
-import { FormProvider, useForm } from "react-hook-form";
+import { FieldErrors, FormProvider, useForm } from "react-hook-form";
 import { CREATE_TALK_FORM_DEFAULT_VALUES } from "../../constants/createTalkForm";
 import { ON_SUBMIT } from "@/constants/form";
 import CreateTalkModalButton from "./CreateTalkModalButton";
 import { postRoom } from "@/services/room";
+import Toast from "react-native-toast-message";
 
 type Props = {
   handleClose: () => void;
@@ -31,10 +32,21 @@ const CreateTalkModalContent = (props: Props) => {
         duration: +value.duration,
       });
 
+      // TODO : 목록 조회 API 리패칭
+      // TODO : 채팅방으로 바로 입장하게 할지 고민 필요
+
       handleClose();
     },
     (error) => {
-      console.log("error : ", error);
+      const firstKey = Object.keys(error)[0] as keyof typeof CREATE_TALK_FORM_DEFAULT_VALUES;
+      const firstMessage = error[firstKey]?.message;
+
+      Toast.show({
+        type: "error",
+        text1: firstMessage,
+        position: "bottom",
+        visibilityTime: 2000,
+      });
     }
   );
 
