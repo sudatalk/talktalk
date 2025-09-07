@@ -4,6 +4,7 @@ import Modal from "@/components/Modal";
 import Text from "@/components/Text";
 import CreateTalkModalTitle from "./CreateTalkModalTitle";
 import CreateTalkModalTeam from "../CreateTalkModalTeam";
+import CreateTalkModalDuration from "./CreateTalkModalDuration";
 
 type Props = {
   isOpen: boolean;
@@ -20,14 +21,7 @@ const CreateTalkModal = (props: Props) => {
         <View style={styles.bodyContainer}>
           <CreateTalkModalTitle />
           <CreateTalkModalTeam />
-          <View
-            style={{
-              flex: 0.3,
-              backgroundColor: "blue",
-            }}
-          >
-            시간 영역
-          </View>
+          <CreateTalkModalDuration />
         </View>
         <View style={styles.footerContainer}>
           <Text white h3>
