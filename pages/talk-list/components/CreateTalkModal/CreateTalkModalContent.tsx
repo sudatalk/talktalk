@@ -1,12 +1,12 @@
-import { Pressable, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import CreateTalkModalHeader from "./CreateTalkModalHeader";
 import CreateTalkModalTitle from "./CreateTalkModalTitle";
 import CreateTalkModalTeam from "../CreateTalkModalTeam";
 import CreateTalkModalDuration from "./CreateTalkModalDuration";
-import Text from "@/components/Text";
 import { FormProvider, useForm } from "react-hook-form";
 import { CREATE_TALK_FORM_DEFAULT_VALUES } from "../../constants/createTalkForm";
 import { ON_SUBMIT } from "@/constants/form";
+import CreateTalkModalButton from "./CreateTalkModalButton";
 
 const CreateTalkModalContent = () => {
   const form = useForm({
@@ -34,11 +34,7 @@ const CreateTalkModalContent = () => {
           <CreateTalkModalDuration />
         </View>
         <View style={styles.footerContainer}>
-          <Pressable onPress={handleSubmit} style={{ padding: 10, paddingLeft: 20, paddingRight: 20 }}>
-            <Text white h3>
-              생성
-            </Text>
-          </Pressable>
+          <CreateTalkModalButton handleSubmit={handleSubmit} />
         </View>
       </View>
     </FormProvider>
