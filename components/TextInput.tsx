@@ -2,6 +2,8 @@ import { TextInput as RNTextInput, StyleSheet, TextInputProps } from "react-nati
 
 type Props = TextInputProps & {
   type1?: boolean;
+
+  white?: boolean;
 };
 
 const TextInput = (props: Props) => {
@@ -31,5 +33,9 @@ const styles = StyleSheet.create({
   type1: {
     fontSize: 16,
     fontWeight: 700,
+  },
+
+  white: {
+    color: "white",
   },
 });
