@@ -84,8 +84,5 @@ const styles = StyleSheet.create({
   },
   footerContainer: {
     flex: 0.15,
-
-    alignItems: "center",
-    justifyContent: "center",
   },
 });
