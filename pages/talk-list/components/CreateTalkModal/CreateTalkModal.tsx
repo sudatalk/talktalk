@@ -46,6 +46,7 @@ const styles = StyleSheet.create({
     flex: 1,
 
     padding: 10,
+    paddingTop: 0,
   },
 
   headerContainer: {
