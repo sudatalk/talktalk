@@ -8,6 +8,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { JOIN_TALK_FORM_DEFAULT_VALUES } from "../../constants/joinTalkForm";
 import Toast from "react-native-toast-message";
 import useGetRoom from "@/hooks/useGetRoom";
+import { postChatJoin } from "@/services/chat";
 
 type Props = {
   handleClose: () => void;
@@ -17,15 +18,23 @@ const JoinTalkModalContent = (props: Props) => {
   const { handleClose } = props;
 
   const { room } = useGetRoom({ id: 5 });
-  const { title, leftTeam, rightTeam } = room || {};
+  const { id: roomId, title, leftTeam, rightTeam } = room || {};
 
   const form = useForm({
     defaultValues: JOIN_TALK_FORM_DEFAULT_VALUES,
   });
 
   const handleSubmit = form.handleSubmit(
-    (value) => {
-      console.log("value : ", value);
+    async (value) => {
+      if (!roomId) return;
+
+      await postChatJoin({
+        userId: "dummy",
+        roomId,
+        nickname: value.nickname,
+        profileUrl: value.profileImageUrl,
+        team: value.team,
+      });
 
       handleClose();
     },
