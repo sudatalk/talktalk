@@ -40,6 +40,8 @@ export default JoinTalkModalProfileImage;
 
 const styles = StyleSheet.create({
   container: {
+    flex: 0.35,
+
     gap: 15,
   },
 
