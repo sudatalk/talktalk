@@ -20,7 +20,7 @@ const JoinTalkModalProfileImage = () => {
   } = useController({
     name: JOIN_TALK_FORM_PATH.PROFILE_IMAGE_URL,
     rules: {
-      required: "토론방에서 사용할 이미지를 선택해주세요",
+      required: "토론방에서 사용할 프로필 사진을 선택해주세요",
     },
   });
 
