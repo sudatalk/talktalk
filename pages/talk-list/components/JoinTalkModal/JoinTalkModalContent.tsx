@@ -7,6 +7,7 @@ import JoinTalkModalTeam from "./JoinTalkModalTeam";
 import { FormProvider, useForm } from "react-hook-form";
 import { JOIN_TALK_FORM_DEFAULT_VALUES } from "../../constants/joinTalkForm";
 import Toast from "react-native-toast-message";
+import useGetRoom from "@/hooks/useGetRoom";
 
 type Props = {
   handleClose: () => void;
@@ -15,12 +16,12 @@ type Props = {
 const JoinTalkModalContent = (props: Props) => {
   const { handleClose } = props;
 
+  const { room } = useGetRoom({ id: 5 });
+  const { title, leftTeam, rightTeam } = room || {};
+
   const form = useForm({
     defaultValues: JOIN_TALK_FORM_DEFAULT_VALUES,
   });
-
-  const leftTeam = "왼쪽 팀명";
-  const rightTeam = "오른쪽 팀명";
 
   const handleSubmit = form.handleSubmit(
     (value) => {
@@ -44,7 +45,7 @@ const JoinTalkModalContent = (props: Props) => {
   return (
     <FormProvider {...form}>
       <View style={styles.container}>
-        <JoinTalkModalHeader />
+        <JoinTalkModalHeader title={title} />
         <View style={styles.bodyContainer}>
           <JoinTalkModalProfileImage />
           <JoinTalkModalNickname />
