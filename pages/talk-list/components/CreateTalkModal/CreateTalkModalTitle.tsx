@@ -1,11 +1,29 @@
 import Divider from "@/components/Divider";
 import TextInput from "@/components/TextInput";
+import { useController } from "react-hook-form";
 import { StyleSheet, View } from "react-native";
+import { CREATE_TALK_FORM_PATH } from "../../constants/createTalkForm";
+
+const MAX_LENGTH = 20;
+
+const REQUIRED_ERROR_MESSAGE = "토론방의 제목을 입력해주세요";
 
 const CreateTalkModalTitle = () => {
+  const {
+    field: { value, onChange },
+  } = useController({
+    name: CREATE_TALK_FORM_PATH.TITLE,
+    rules: {
+      required: REQUIRED_ERROR_MESSAGE,
+      maxLength: MAX_LENGTH,
+    },
+  });
+
+  // TODO : 텍스트 입력 시 Divider 와 간격이 바뀌는 이슈 존재
+
   return (
     <View style={styles.container}>
-      <TextInput type1 placeholder="토론방의 제목을 입력해주세요" placeholderTextColor="#808080" style={styles.textInput} />
+      <TextInput white value={value} onChangeText={onChange} type1 placeholder="토론방의 제목을 입력해주세요" placeholderTextColor="#808080" style={styles.textInput} maxLength={MAX_LENGTH} />
       <Divider type1 />
     </View>
   );
