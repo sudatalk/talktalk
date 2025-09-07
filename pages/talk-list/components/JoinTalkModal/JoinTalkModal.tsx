@@ -11,7 +11,7 @@ const JoinTalkModal = (props: Props) => {
 
   return (
     <Modal isOpen={isOpen} handleClose={handleClose}>
-      {isOpen && <JoinTalkModalContent />}
+      {isOpen && <JoinTalkModalContent handleClose={handleClose} />}
     </Modal>
   );
 };
