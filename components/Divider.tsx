@@ -6,8 +6,6 @@ type Props = {
 };
 
 const Divider = (props: Props) => {
-  const { type1 } = props;
-
   let style = {};
 
   Object.entries(props).forEach(([key, value]) => {
