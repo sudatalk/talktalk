@@ -1,5 +1,7 @@
 import Text from "@/components/Text";
-import { StyleSheet, View } from "react-native";
+import { useController } from "react-hook-form";
+import { Pressable, StyleSheet, View } from "react-native";
+import { JOIN_TALK_FORM_PATH } from "../../constants/joinTalkForm";
 
 type Props = {
   leftTeam: string;
@@ -9,6 +11,19 @@ type Props = {
 const JoinTalkModalTeam = (props: Props) => {
   const { leftTeam, rightTeam } = props;
 
+  const {
+    field: { value, onChange },
+  } = useController({
+    name: JOIN_TALK_FORM_PATH.TEAM,
+    rules: {
+      required: "토론방에 참여할 팀을 선택해주세요",
+    },
+  });
+
+  const handleClick = (value: string) => {
+    onChange(value);
+  };
+
   return (
     <View style={styles.container}>
       <Text white h3>
@@ -16,14 +31,14 @@ const JoinTalkModalTeam = (props: Props) => {
       </Text>
       <View style={styles.teamContainer}>
         <View style={styles.teamContentContainer}>
-          <View style={styles.teamContentWrapper}>
+          <Pressable onPress={() => handleClick(leftTeam)} style={{ ...styles.teamContentWrapper, ...(value === leftTeam && styles.selected) }}>
             <Text>{leftTeam}</Text>
-          </View>
+          </Pressable>
         </View>
         <View style={styles.teamContentContainer}>
-          <View style={styles.teamContentWrapper}>
+          <Pressable onPress={() => handleClick(rightTeam)} style={{ ...styles.teamContentWrapper, ...(value === rightTeam && styles.selected) }}>
             <Text>{rightTeam}</Text>
-          </View>
+          </Pressable>
         </View>
       </View>
     </View>
@@ -56,11 +71,14 @@ const styles = StyleSheet.create({
     flex: 0.9,
     height: 40,
 
-    backgroundColor: "white",
+    backgroundColor: "#808080",
 
     alignItems: "center",
     justifyContent: "center",
 
     borderRadius: 5,
+  },
+  selected: {
+    backgroundColor: "white",
   },
 });
