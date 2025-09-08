@@ -1,19 +1,24 @@
 import Text from "@/components/Text";
 import { useController } from "react-hook-form";
-import { Image, Pressable, StyleSheet, View } from "react-native";
+import { ActivityIndicator, Image, Pressable, StyleSheet, View } from "react-native";
 import { JOIN_TALK_FORM_PATH } from "../../constants/joinTalkForm";
-
-const DUMMY_IMAGE_URI = [
-  "https://fastly.picsum.photos/id/646/200/300.jpg?hmac=qCJ0bf6G6oSxx8YMMc1ZLVryK-w596XjRD3o8cXQLFc",
-  "https://fastly.picsum.photos/id/571/200/300.jpg?hmac=M2JAmSQct67FkQUX0_IWCUClgxf45dexs4oYKhpFDLA",
-  "https://fastly.picsum.photos/id/551/200/300.jpg?hmac=pXJCWIikY_BiqwhtawBb8x1jxclDny0522ZprZVTJiU",
-  "https://fastly.picsum.photos/id/570/200/300.jpg?hmac=fMlqjNmBSgN75P_tCU-PVSGzRYQxU23Xqd593HxZSZQ",
-  "https://fastly.picsum.photos/id/34/200/300.jpg?hmac=K076uH4zC5xneqvhRayjS90G00xjPsR7eL_ShGEr6rs",
-  "https://fastly.picsum.photos/id/585/200/300.jpg?hmac=9pIkZ1OAqMKxQt7_5yNLOWAjZBmJ99k53TBNs3xQQe4",
-];
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const JoinTalkModalProfileImage = () => {
   // TODO : 프로필 이미지 어떻게 관리할지 고민 필요 (S3, public 등)
+
+  const [list, setList] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      const response = await Promise.all(Array.from({ length: 6 }, (_, i) => axios.get(`https://picsum.photos/60?random=${Date.now()}-${i}`).then((res) => res.request.responseURL)));
+
+      setList(response);
+      setIsLoading(false);
+    })();
+  }, []);
 
   const {
     field: { value, onChange },
@@ -34,20 +39,26 @@ const JoinTalkModalProfileImage = () => {
         프로필 이미지 선택
       </Text>
       <View style={styles.imageContainer}>
-        {DUMMY_IMAGE_URI.map((url, index) => {
-          const isSelected = value === url;
+        {isLoading ? (
+          <ActivityIndicator style={{ paddingTop: 15 }} />
+        ) : (
+          <>
+            {list.map((url, index) => {
+              const isSelected = value === url;
 
-          return (
-            <Pressable onPress={() => handleClick(url)} key={index}>
-              <Image
-                source={{
-                  uri: url,
-                }}
-                style={{ ...styles.image, ...(isSelected && styles.selected) }}
-              />
-            </Pressable>
-          );
-        })}
+              return (
+                <Pressable onPress={() => handleClick(url)} key={index}>
+                  <Image
+                    source={{
+                      uri: url,
+                    }}
+                    style={{ ...styles.image, ...(isSelected && styles.selected) }}
+                  />
+                </Pressable>
+              );
+            })}
+          </>
+        )}
       </View>
     </View>
   );

@@ -1,11 +1,17 @@
 import Text from "@/components/Text";
 import { StyleSheet, View } from "react-native";
 
-const JoinTalkModalHeader = () => {
+type Props = {
+  title?: string;
+};
+
+const JoinTalkModalHeader = (props: Props) => {
+  const { title } = props;
+
   return (
     <View style={styles.container}>
       <Text white h2>
-        토론방 참여하기
+        {title}
       </Text>
     </View>
   );

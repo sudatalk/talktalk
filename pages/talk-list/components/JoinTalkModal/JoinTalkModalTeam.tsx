@@ -4,12 +4,12 @@ import { Pressable, StyleSheet, View } from "react-native";
 import { JOIN_TALK_FORM_PATH } from "../../constants/joinTalkForm";
 
 type Props = {
-  leftTeam: string;
-  rightTeam: string;
+  leftTeam?: string;
+  rightTeam?: string;
 };
 
 const JoinTalkModalTeam = (props: Props) => {
-  const { leftTeam, rightTeam } = props;
+  const { leftTeam = "왼쪽 팀명", rightTeam = "오른쪽 팀명" } = props;
 
   const {
     field: { value, onChange },

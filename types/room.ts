@@ -8,8 +8,12 @@ export type PostRoomParams = {
 export type RoomResponse = {
   id: number;
   title: string;
-  leftTeam: String;
+  leftTeam: string;
   rightTeam: string;
   createdAt: string;
   expiredAt: string;
+};
+
+export type GetRoomDetailParams = {
+  id: number;
 };
