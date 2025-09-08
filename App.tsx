@@ -3,6 +3,7 @@ import { Button, StyleSheet, Text, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import CreateTalkModal from "./pages/talk-list/components/CreateTalkModal";
 import useDisclosure from "./hooks/useDisclosure";
+import Toast from "./components/Toast";
 
 export default function App() {
   const { isOpen, handleOpen, handleClose } = useDisclosure();
@@ -16,6 +17,7 @@ export default function App() {
         <Button title="채팅방 참여 오픈" />
         <CreateTalkModal isOpen={isOpen} handleClose={handleClose} />
       </View>
+      <Toast />
     </GestureHandlerRootView>
   );
 }
