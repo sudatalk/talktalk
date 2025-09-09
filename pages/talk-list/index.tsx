@@ -41,11 +41,11 @@ const styles = StyleSheet.create({
   header: {
     position: "relative",
     paddingHorizontal: 20,
-    paddingVertical: 8,
+    paddingVertical: 10,
     alignItems: "center",
   },
   headerTitle: {
-    fontSize: 24,
+    fontSize: 27,
     fontWeight: "800",
     color: "#fff",
     letterSpacing: 2,
