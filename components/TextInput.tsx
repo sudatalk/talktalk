@@ -1,18 +1,18 @@
-import { TextInput as RNTextInput, StyleSheet, TextInputProps } from "react-native";
+import { TextInput as RNTextInput, StyleSheet, TextInputProps as RNTextInputProps } from "react-native";
 
-type Props = TextInputProps & {
+export type TextInputProps = RNTextInputProps & {
   type1?: boolean;
 
   white?: boolean;
 };
 
-const TextInput = (props: Props) => {
+const TextInput = (props: TextInputProps) => {
   let style = {};
 
   Object.entries(props).forEach(([key, value]) => {
-    if (key in styles) {
+    if (key in textInputStyles) {
       if (value) {
-        style = { ...style, ...styles[key as keyof typeof styles], ...styles["default"] };
+        style = { ...style, ...textInputStyles[key as keyof typeof textInputStyles], ...textInputStyles["default"] };
       }
     }
   });
@@ -22,7 +22,7 @@ const TextInput = (props: Props) => {
 
 export default TextInput;
 
-const styles = StyleSheet.create({
+export const textInputStyles = StyleSheet.create({
   default: {
     paddingBottom: 0, // 안드로이드 기본 패딩 제거
 
