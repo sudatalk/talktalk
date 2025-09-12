@@ -1,8 +1,8 @@
 import Text from "@/components/Text";
-import TextInput from "@/components/TextInput";
 import { useController } from "react-hook-form";
 import { StyleSheet, View } from "react-native";
 import { CREATE_TALK_FORM_PATH } from "../../constants/createTalkForm";
+import ModalTextInput from "@/components/Modal/ModalTextInput";
 
 const MAX_LENGTH = 8;
 
@@ -34,7 +34,7 @@ const CreateTalkModalTeam = () => {
     <View style={styles.container}>
       <View style={styles.teamContainer}>
         <View style={styles.teamWrapper}>
-          <TextInput value={leftTeamValue} onChangeText={onChangeLeftTeam} placeholder="왼쪽 팀명" placeholderTextColor="#808080" maxLength={MAX_LENGTH} />
+          <ModalTextInput value={leftTeamValue} onChangeText={onChangeLeftTeam} placeholder="왼쪽 팀명" placeholderTextColor="#808080" maxLength={MAX_LENGTH} />
         </View>
       </View>
       <View style={styles.vsContainer}>
@@ -44,7 +44,7 @@ const CreateTalkModalTeam = () => {
       </View>
       <View style={styles.teamContainer}>
         <View style={styles.teamWrapper}>
-          <TextInput value={rightTeamValue} onChangeText={onChangeRightTeam} placeholder="오른쪽 팀명" placeholderTextColor="#808080" maxLength={MAX_LENGTH} />
+          <ModalTextInput value={rightTeamValue} onChangeText={onChangeRightTeam} placeholder="오른쪽 팀명" placeholderTextColor="#808080" maxLength={MAX_LENGTH} />
         </View>
       </View>
     </View>
