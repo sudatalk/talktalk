@@ -1,9 +1,14 @@
+export enum Team {
+  LEFT = "LEFT",
+  RIGHT = "RIGHT",
+}
+
 export type PostChatJoinParams = {
   roomId: number;
   userId: string;
   nickname: string;
   profileUrl: string;
-  team: string;
+  team: Team;
 };
 
 export type ChatResponse = {
