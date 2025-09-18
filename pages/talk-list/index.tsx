@@ -1,35 +1,36 @@
 import React from "react";
 import { View, Text, Pressable, FlatList, StyleSheet } from "react-native";
 import RoomCard from "./components/RoomCard/RoomCard";
-import { Room, RoomStatus } from "@/types/room";
+import useGetRoomList from "@/hooks/useGetRoomList";
+import { RoomResponse } from "@/types/room";
 
-const MOCK: Room[] = [
-  { id: "1", title: "가나다라마바사가나", leftTeam: "무슨 팀 선택할래", rightTeam: "부먹", leftCount: 5, rightCount: 5, progress: 0.62, expiredAt: "14:45에 종료", status: RoomStatus.OPEN },
-  { id: "2", title: "가나다라마바사가나\n다라마바사가나다라마바", leftTeam: "찍먹 찍먹 찍먹 찍먹", rightTeam: "부먹", leftCount: 5, rightCount: 5, progress: 0.62, expiredAt: "14:45에 종료", status: RoomStatus.OPEN },
-  { id: "3", title: "가나다라마바사가나", leftTeam: "찍먹찍먹찍먹찍먹", rightTeam: "부먹", leftCount: 5, rightCount: 5, progress: 0.62, status: RoomStatus.CLOSED },
-];
+type Props = {
+  roomList?: RoomResponse[];
+  setRoomId: (id: number) => void;
+  handleOpenJoinTalkModal: () => void;
+  handleOpenCreateTalkModal: () => void;
+};
 
-interface RoomListProps {
-  openJoinTalkModal: () => void;
-  openCreateTalkModal: () => void;
-}
+export default function RoomList(props: Props) {
+  const { roomList, setRoomId, handleOpenJoinTalkModal, handleOpenCreateTalkModal } = props;
 
-export default function RoomList({ openJoinTalkModal, openCreateTalkModal }: RoomListProps) {
+  const handleClickJoinButton = (id: number) => {
+    setRoomId(id);
+    handleOpenJoinTalkModal();
+  };
+
   return (
     <>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>토론방</Text>
-        <Pressable style={styles.createButton} onPress={openCreateTalkModal}>
+        <Pressable style={styles.createButton} onPress={handleOpenCreateTalkModal}>
           <Text style={styles.createButtonText}>방 만들기</Text>
         </Pressable>
       </View>
-
       <FlatList
-        data={MOCK}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <RoomCard room={item} onPress={openJoinTalkModal} />
-        )}
+        data={roomList}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => <RoomCard room={item} onPress={handleClickJoinButton} />}
         contentContainerStyle={styles.listContent}
         ItemSeparatorComponent={() => <View style={{ height: 24 }} />}
       />
