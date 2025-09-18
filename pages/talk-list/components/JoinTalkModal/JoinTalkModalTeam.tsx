@@ -2,6 +2,7 @@ import Text from "@/components/Text";
 import { useController } from "react-hook-form";
 import { Pressable, StyleSheet, View } from "react-native";
 import { JOIN_TALK_FORM_PATH } from "../../constants/joinTalkForm";
+import { Team } from "@/types/chat";
 
 type Props = {
   leftTeam?: string;
@@ -31,12 +32,12 @@ const JoinTalkModalTeam = (props: Props) => {
       </Text>
       <View style={styles.teamContainer}>
         <View style={styles.teamContentContainer}>
-          <Pressable onPress={() => handleClick(leftTeam)} style={{ ...styles.teamContentWrapper, ...(value === leftTeam && styles.selected) }}>
+          <Pressable onPress={() => handleClick(Team.LEFT)} style={{ ...styles.teamContentWrapper, ...(value === Team.LEFT && styles.selected) }}>
             <Text>{leftTeam}</Text>
           </Pressable>
         </View>
         <View style={styles.teamContentContainer}>
-          <Pressable onPress={() => handleClick(rightTeam)} style={{ ...styles.teamContentWrapper, ...(value === rightTeam && styles.selected) }}>
+          <Pressable onPress={() => handleClick(Team.RIGHT)} style={{ ...styles.teamContentWrapper, ...(value === Team.RIGHT && styles.selected) }}>
             <Text>{rightTeam}</Text>
           </Pressable>
         </View>
