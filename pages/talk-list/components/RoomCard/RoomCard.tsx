@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet } from "react-native";
-import { Room, RoomResponse } from "@/types/room";
+import { RoomResponse } from "@/types/room";
 import ProgressBar from "./ProgressBar";
 import FooterButton from "./FooterButton";
 export default function RoomCard({ room, onPress }: { room: RoomResponse; onPress: (id: number) => void }) {
