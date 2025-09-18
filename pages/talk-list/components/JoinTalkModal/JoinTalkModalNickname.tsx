@@ -1,8 +1,8 @@
 import Divider from "@/components/Divider";
-import TextInput from "@/components/TextInput";
 import { useController } from "react-hook-form";
 import { StyleSheet, View } from "react-native";
 import { JOIN_TALK_FORM_PATH } from "../../constants/joinTalkForm";
+import ModalTextInput from "@/components/Modal/ModalTextInput";
 
 const MAX_LENGTH = 20;
 
@@ -20,7 +20,7 @@ const JoinTalkModalNickname = () => {
 
   return (
     <View style={styles.container}>
-      <TextInput value={value} onChangeText={onChange} white type1 placeholder="방에서 사용할 닉네임을 입력해주세요" placeholderTextColor="#808080" style={styles.textInput} maxLength={MAX_LENGTH} />
+      <ModalTextInput value={value} onChangeText={onChange} white type1 placeholder="방에서 사용할 닉네임을 입력해주세요" placeholderTextColor="#808080" style={styles.textInput} maxLength={MAX_LENGTH} />
       <Divider type1 />
     </View>
   );
