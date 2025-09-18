@@ -3,17 +3,18 @@ import JoinTalkModalContent from "./JoinTalkModalContent";
 
 type Props = {
   roomId?: number;
+  userId?: string;
   isOpen: boolean;
   handleClose: () => void;
   handleRefetchRoomList: () => Promise<void>;
 };
 
 const JoinTalkModal = (props: Props) => {
-  const { isOpen, roomId, handleClose, handleRefetchRoomList } = props;
+  const { isOpen, roomId, userId, handleClose, handleRefetchRoomList } = props;
 
   return (
     <Modal isOpen={isOpen} handleClose={handleClose}>
-      {isOpen && roomId && <JoinTalkModalContent roomId={roomId} handleClose={handleClose} handleRefetchRoomList={handleRefetchRoomList} />}
+      {isOpen && roomId && <JoinTalkModalContent roomId={roomId} userId={userId} handleClose={handleClose} handleRefetchRoomList={handleRefetchRoomList} />}
     </Modal>
   );
 };
