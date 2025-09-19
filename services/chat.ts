@@ -1,15 +1,15 @@
 import { ChatResponse, GetChatUserParams, PostChatJoinParams, PutChatUserParams } from "@/types/chat";
-import axios, { AxiosResponse } from "axios";
 import { API_HOST } from "./host";
+import { api } from "@/utils/api";
 
-export function postChatJoin(params: PostChatJoinParams): Promise<AxiosResponse<ChatResponse>> {
-  return axios.post<ChatResponse>(`${API_HOST}/chat/join`, params);
+export function postChatJoin(params: PostChatJoinParams): Promise<ChatResponse> {
+  return api.post(`${API_HOST}/chat/join`, params);
 }
 
-export function getChatUser(params: GetChatUserParams): Promise<AxiosResponse<ChatResponse>> {
-  return axios.get<ChatResponse>(`${API_HOST}/chat/user`, { params });
+export function getChatUser(params: GetChatUserParams): Promise<ChatResponse> {
+  return api.get(`${API_HOST}/chat/user`, { params });
 }
 
-export function putChatUser(params: PutChatUserParams): Promise<AxiosResponse<ChatResponse>> {
-  return axios.put<ChatResponse>(`${API_HOST}/chat/user`, params);
+export function putChatUser(params: PutChatUserParams): Promise<ChatResponse> {
+  return api.put(`${API_HOST}/chat/user`, params);
 }

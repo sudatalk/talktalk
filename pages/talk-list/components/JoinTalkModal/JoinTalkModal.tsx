@@ -6,15 +6,14 @@ type Props = {
   userId?: string;
   isOpen: boolean;
   handleClose: () => void;
-  handleRefetchRoomList: () => Promise<void>;
 };
 
 const JoinTalkModal = (props: Props) => {
-  const { isOpen, roomId, userId, handleClose, handleRefetchRoomList } = props;
+  const { isOpen, roomId, userId, handleClose } = props;
 
   return (
     <Modal isOpen={isOpen} handleClose={handleClose}>
-      {isOpen && roomId && <JoinTalkModalContent roomId={roomId} userId={userId} handleClose={handleClose} handleRefetchRoomList={handleRefetchRoomList} />}
+      {isOpen && roomId && userId && <JoinTalkModalContent isEditMode={true} roomId={roomId} userId={userId} handleClose={handleClose} />}
     </Modal>
   );
 };

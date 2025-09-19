@@ -2,21 +2,24 @@ import React from "react";
 import { View, Text, Pressable, FlatList, StyleSheet } from "react-native";
 import RoomCard from "./components/RoomCard/RoomCard";
 import useGetRoomList from "@/hooks/useGetRoomList";
-import { RoomResponse } from "@/types/room";
+import useDisclosure from "@/hooks/useDisclosure";
+import CreateTalkModal from "./components/CreateTalkModal";
+import JoinTalkModal from "./components/JoinTalkModal";
+import useJoinTalkModal from "./hooks/useJoinTalkModal";
 
-type Props = {
-  roomList?: RoomResponse[];
-  setRoomId: (id: number) => void;
-  handleOpenJoinTalkModal: () => void;
-  handleOpenCreateTalkModal: () => void;
-};
+export default function RoomList() {
+  const { data } = useGetRoomList({
+    options: {
+      refetchOnMount: true,
+    },
+  });
 
-export default function RoomList(props: Props) {
-  const { roomList, setRoomId, handleOpenJoinTalkModal, handleOpenCreateTalkModal } = props;
+  const { isOpen: isOpenCreateTalkModal, handleOpen: handleOpenCreateTalkModal, handleClose: handleCloseCreateTalkModal } = useDisclosure();
+
+  const { roomId, isOpenJoinTalkModal, handleCloseJoinTalkModal, handleOpenJoinTalkModal } = useJoinTalkModal();
 
   const handleClickJoinButton = (id: number) => {
-    setRoomId(id);
-    handleOpenJoinTalkModal();
+    handleOpenJoinTalkModal(id);
   };
 
   return (
@@ -28,12 +31,14 @@ export default function RoomList(props: Props) {
         </Pressable>
       </View>
       <FlatList
-        data={roomList}
+        data={data}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => <RoomCard room={item} onPress={handleClickJoinButton} />}
         contentContainerStyle={styles.listContent}
         ItemSeparatorComponent={() => <View style={{ height: 24 }} />}
       />
+      <CreateTalkModal isOpen={isOpenCreateTalkModal} handleClose={handleCloseCreateTalkModal} />
+      <JoinTalkModal roomId={roomId} userId={"dummy"} isOpen={isOpenJoinTalkModal} handleClose={handleCloseJoinTalkModal} />
     </>
   );
 }

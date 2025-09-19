@@ -1,36 +1,26 @@
 import { getChatUser } from "@/services/chat";
+import { UseQueryOptions } from "@/types/base";
 import { ChatResponse } from "@/types/chat";
-import { useEffect, useState } from "react";
+import { skipToken, useQuery } from "@tanstack/react-query";
 
 type Props = {
   roomId?: number;
   userId?: string;
+  options?: UseQueryOptions<ChatResponse>;
 };
 
+const getRoomUserInfoQueryKey = (props: Props) => ["GET_ROOM_USER_INFO", props];
+
+const getRoomUserInfoQueryFn = (roomId: number, userId: string) => getChatUser({ roomId, userId });
+
 const useGetRoomUserInfo = (props: Props) => {
-  const { roomId, userId } = props;
+  const { roomId, userId, options } = props;
 
-  const [roomUserInfo, setRoomUserInfo] = useState<ChatResponse>();
-
-  useEffect(() => {
-    if (!roomId || !userId) return;
-
-    (async () => {
-      const { data } = await getChatUser({ roomId, userId });
-      setRoomUserInfo(data);
-    })();
-  }, [roomId, userId]);
-
-  const refetch = () => {
-    if (!roomId || !userId) return;
-
-    (async () => {
-      const { data } = await getChatUser({ roomId, userId });
-      setRoomUserInfo(data);
-    })();
-  };
-
-  return { roomUserInfo, refetch };
+  return useQuery({
+    queryKey: getRoomUserInfoQueryKey(props),
+    queryFn: roomId && userId ? () => getRoomUserInfoQueryFn(roomId, userId) : skipToken,
+    ...options,
+  });
 };
 
 export default useGetRoomUserInfo;
