@@ -2,16 +2,17 @@ import Text from "@/components/Text";
 import { useController } from "react-hook-form";
 import { ActivityIndicator, Image, Pressable, StyleSheet, View } from "react-native";
 import { JOIN_TALK_FORM_PATH } from "../../constants/joinTalkForm";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import useRandomImage from "../../hooks/useRandomImage";
 
-const JoinTalkModalProfileImage = () => {
-  const [list, setList] = useState<string[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+type Props = {
+  profileUrl?: string;
+};
+
+const JoinTalkModalProfileImage = (props: Props) => {
+  const { profileUrl } = props;
 
   const {
     field: { value, onChange },
-    formState: { defaultValues },
   } = useController({
     name: JOIN_TALK_FORM_PATH.PROFILE_IMAGE_URL,
     rules: {
@@ -19,15 +20,9 @@ const JoinTalkModalProfileImage = () => {
     },
   });
 
-  useEffect(() => {
-    (async () => {
-      const response = await Promise.all(Array.from({ length: 6 }, (_, i) => axios.get(`https://picsum.photos/60?random=${Date.now()}-${i}`).then((res) => res.request.responseURL)));
+  const { data, isFetching } = useRandomImage();
 
-      setList(response);
-
-      setIsLoading(false);
-    })();
-  }, []);
+  const imageList = [profileUrl, ...(data || [])].filter((v): v is string => !!v).slice(0, 6);
 
   const handleClick = (value: string) => {
     onChange(value);
@@ -39,11 +34,11 @@ const JoinTalkModalProfileImage = () => {
         프로필 이미지 선택
       </Text>
       <View style={styles.imageContainer}>
-        {isLoading ? (
+        {isFetching ? (
           <ActivityIndicator style={{ paddingTop: 15 }} />
         ) : (
           <>
-            {list.map((url, index) => {
+            {imageList.map((url, index) => {
               const isSelected = value === url;
 
               return (

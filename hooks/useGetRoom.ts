@@ -1,25 +1,18 @@
 import { getRoomDetail } from "@/services/room";
-import { RoomResponse } from "@/types/room";
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 type Props = {
   id: number;
 };
 
+const getRoomDetailQueryKey = (props: Props) => ["GET_ROOM_DETAIL", props];
+const getRoomDetailQueryFn = (props: Props) => () => getRoomDetail(props);
+
 const useGetRoom = (props: Props) => {
-  const { id } = props;
-
-  const [room, setRoom] = useState<RoomResponse>();
-
-  useEffect(() => {
-    (async () => {
-      const { data } = await getRoomDetail({ id });
-
-      setRoom(data);
-    })();
-  }, [id]);
-
-  return { room };
+  return useQuery({
+    queryKey: getRoomDetailQueryKey(props),
+    queryFn: getRoomDetailQueryFn(props),
+  });
 };
 
 export default useGetRoom;

@@ -4,68 +4,46 @@ import JoinTalkModalButton from "./JoinTalkModalButton";
 import JoinTalkModalProfileImage from "./JoinTalkModalProfileImage";
 import JoinTalkModalNickname from "./JoinTalkModalNickname";
 import JoinTalkModalTeam from "./JoinTalkModalTeam";
-import { FormProvider, useForm } from "react-hook-form";
-import { JOIN_TALK_FORM_DEFAULT_VALUES } from "../../constants/joinTalkForm";
-import Toast from "react-native-toast-message";
+import { FormProvider, useWatch } from "react-hook-form";
 import useGetRoom from "@/hooks/useGetRoom";
-import { Team } from "@/types/chat";
-import useJoinChat from "../../hooks/useJoinChat";
+import useJoinTalkModalForm from "../../hooks/useJoinTalkModalForm";
+import useGetRoomUserInfo from "@/hooks/useGetRoomUserInfo";
 
 type Props = {
+  userId: string;
   roomId: number;
+  isEditMode?: boolean;
   handleClose: () => void;
 };
 
 const JoinTalkModalContent = (props: Props) => {
-  const { roomId, handleClose } = props;
+  const { roomId, userId, isEditMode = false, handleClose } = props;
 
-  const { room } = useGetRoom({ id: roomId });
+  const { data: room } = useGetRoom({ id: roomId });
   const { title, leftTeam, rightTeam } = room || {};
 
-  const form = useForm({
-    defaultValues: JOIN_TALK_FORM_DEFAULT_VALUES,
+  const { data: roomUserInfo } = useGetRoomUserInfo({
+    roomId,
+    userId,
+    options: {
+      enabled: isEditMode && !!roomId && !!userId,
+      refetchOnMount: true,
+    },
   });
 
-  const { mutateAsync: joinChatAsync } = useJoinChat();
-
-  const handleSubmit = form.handleSubmit(
-    async (value) => {
-      if (!roomId) return;
-
-      await joinChatAsync({
-        userId: "dummy",
-        roomId,
-        nickname: value.nickname,
-        profileUrl: value.profileImageUrl,
-        team: value.team as Team,
-      });
-
-      handleClose();
-    },
-    (error) => {
-      const firstKey = Object.keys(error)[0] as keyof typeof JOIN_TALK_FORM_DEFAULT_VALUES;
-      const firstMessage = error[firstKey]?.message;
-
-      Toast.show({
-        type: "error",
-        text1: firstMessage,
-        position: "bottom",
-        visibilityTime: 2000,
-      });
-    }
-  );
+  const { form, handleSubmit } = useJoinTalkModalForm({ initialData: roomUserInfo, userId, roomId, isEditMode });
 
   return (
     <FormProvider {...form}>
       <View style={styles.container}>
         <JoinTalkModalHeader title={title} />
         <View style={styles.bodyContainer}>
-          <JoinTalkModalProfileImage />
+          <JoinTalkModalProfileImage profileUrl={roomUserInfo?.profileUrl} />
           <JoinTalkModalNickname />
           <JoinTalkModalTeam leftTeam={leftTeam} rightTeam={rightTeam} />
         </View>
         <View style={styles.footerContainer}>
-          <JoinTalkModalButton handleSubmit={handleSubmit} />
+          <JoinTalkModalButton handleSubmit={handleSubmit({ onSuccess: handleClose })} />
         </View>
       </View>
     </FormProvider>

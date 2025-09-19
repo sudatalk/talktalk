@@ -38,7 +38,7 @@ export default function RoomList() {
         ItemSeparatorComponent={() => <View style={{ height: 24 }} />}
       />
       <CreateTalkModal isOpen={isOpenCreateTalkModal} handleClose={handleCloseCreateTalkModal} />
-      <JoinTalkModal roomId={roomId} isOpen={isOpenJoinTalkModal} handleClose={handleCloseJoinTalkModal} />
+      <JoinTalkModal roomId={roomId} userId={"dummy"} isOpen={isOpenJoinTalkModal} handleClose={handleCloseJoinTalkModal} />
     </>
   );
 }

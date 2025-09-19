@@ -19,7 +19,7 @@ export type ChatResponse = {
   userId: string;
   nickname: string;
   profileUrl: string;
-  team: string;
+  team: Team;
 };
 
 export type GetChatUserParams = {
