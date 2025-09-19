@@ -2,17 +2,18 @@ import Text from "@/components/Text";
 import { Pressable, StyleSheet, View } from "react-native";
 
 type Props = {
+  editMode: boolean;
   handleSubmit: () => void;
 };
 
 const JoinTalkModalButton = (props: Props) => {
-  const { handleSubmit } = props;
+  const { editMode, handleSubmit } = props;
 
   return (
     <View style={styles.container}>
       <Pressable onPress={handleSubmit} style={styles.button}>
         <Text white h3>
-          입장하기
+          {editMode ? "수정하기" : "입장하기"}
         </Text>
       </Pressable>
     </View>

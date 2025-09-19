@@ -11,6 +11,8 @@ export type PostChatJoinParams = {
   team: Team;
 };
 
+export type PutChatUserParams = PostChatJoinParams;
+
 export type ChatResponse = {
   id: number;
   roomId: number;
@@ -18,4 +20,9 @@ export type ChatResponse = {
   nickname: string;
   profileUrl: string;
   team: string;
+};
+
+export type GetChatUserParams = {
+  roomId: number;
+  userId: string;
 };

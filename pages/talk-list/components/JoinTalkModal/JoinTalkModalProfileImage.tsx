@@ -5,29 +5,40 @@ import { JOIN_TALK_FORM_PATH } from "../../constants/joinTalkForm";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const JoinTalkModalProfileImage = () => {
-  // TODO : 프로필 이미지 어떻게 관리할지 고민 필요 (S3, public 등)
+type Props = {
+  initialImageUrl?: string;
+  editMode: boolean;
+};
+
+const JoinTalkModalProfileImage = (props: Props) => {
+  const { initialImageUrl, editMode } = props;
 
   const [list, setList] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    (async () => {
-      const response = await Promise.all(Array.from({ length: 6 }, (_, i) => axios.get(`https://picsum.photos/60?random=${Date.now()}-${i}`).then((res) => res.request.responseURL)));
-
-      setList(response);
-      setIsLoading(false);
-    })();
-  }, []);
-
   const {
     field: { value, onChange },
+    formState: { defaultValues },
   } = useController({
     name: JOIN_TALK_FORM_PATH.PROFILE_IMAGE_URL,
     rules: {
       required: "토론방에서 사용할 프로필 사진을 선택해주세요",
     },
   });
+
+  useEffect(() => {
+    (async () => {
+      const response = await Promise.all(Array.from({ length: 6 }, (_, i) => axios.get(`https://picsum.photos/60?random=${Date.now()}-${i}`).then((res) => res.request.responseURL)));
+
+      if (editMode) {
+        setList([initialImageUrl, ...response.slice(0, 5)]);
+      } else {
+        setList(response);
+      }
+
+      setIsLoading(false);
+    })();
+  }, [initialImageUrl, editMode]);
 
   const handleClick = (value: string) => {
     onChange(value);
