@@ -9,11 +9,11 @@ type Props = {
 };
 
 const JoinTalkModal = (props: Props) => {
-  const { isOpen, roomId, userId, handleClose } = props;
+  const { isOpen, roomId, handleClose } = props;
 
   return (
     <Modal isOpen={isOpen} handleClose={handleClose}>
-      {isOpen && roomId && <JoinTalkModalContent roomId={roomId} userId={userId} handleClose={handleClose} />}
+      {isOpen && roomId && <JoinTalkModalContent roomId={roomId} handleClose={handleClose} />}
     </Modal>
   );
 };

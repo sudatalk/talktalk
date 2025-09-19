@@ -1,4 +1,4 @@
-import { ActivityIndicator, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import JoinTalkModalHeader from "./JoinTalkModalHeader";
 import JoinTalkModalButton from "./JoinTalkModalButton";
 import JoinTalkModalProfileImage from "./JoinTalkModalProfileImage";
@@ -8,69 +8,37 @@ import { FormProvider, useForm } from "react-hook-form";
 import { JOIN_TALK_FORM_DEFAULT_VALUES } from "../../constants/joinTalkForm";
 import Toast from "react-native-toast-message";
 import useGetRoom from "@/hooks/useGetRoom";
-import { postChatJoin, putChatUser } from "@/services/chat";
 import { Team } from "@/types/chat";
-import useGetRoomUserInfo from "@/hooks/useGetRoomUserInfo";
-import { useEffect } from "react";
-import { Refetch } from "@/types/base";
-import { RoomResponse } from "@/types/room";
 import useJoinChat from "../../hooks/useJoinChat";
-import useModifyChatUser from "../../hooks/useModifyChatUser";
 
 type Props = {
   roomId: number;
-  userId?: string;
   handleClose: () => void;
 };
 
 const JoinTalkModalContent = (props: Props) => {
-  const { roomId, userId, handleClose } = props;
-
-  const editMode = !!userId;
+  const { roomId, handleClose } = props;
 
   const { room } = useGetRoom({ id: roomId });
   const { title, leftTeam, rightTeam } = room || {};
-
-  const { roomUserInfo } = useGetRoomUserInfo({ roomId, userId });
 
   const form = useForm({
     defaultValues: JOIN_TALK_FORM_DEFAULT_VALUES,
   });
 
   const { mutateAsync: joinChatAsync } = useJoinChat();
-  const { mutateAsync: modifyChatUserAsync } = useModifyChatUser();
-
-  useEffect(() => {
-    if (!roomUserInfo) return;
-
-    form.reset({
-      nickname: roomUserInfo.nickname,
-      profileImageUrl: roomUserInfo.profileUrl,
-      team: roomUserInfo.team,
-    });
-  }, [roomUserInfo]);
 
   const handleSubmit = form.handleSubmit(
     async (value) => {
       if (!roomId) return;
 
-      if (editMode) {
-        await modifyChatUserAsync({
-          userId: "dummy",
-          roomId,
-          nickname: value.nickname,
-          profileUrl: value.profileImageUrl,
-          team: value.team as Team,
-        });
-      } else {
-        await joinChatAsync({
-          userId: "dummy",
-          roomId,
-          nickname: value.nickname,
-          profileUrl: value.profileImageUrl,
-          team: value.team as Team,
-        });
-      }
+      await joinChatAsync({
+        userId: "dummy",
+        roomId,
+        nickname: value.nickname,
+        profileUrl: value.profileImageUrl,
+        team: value.team as Team,
+      });
 
       handleClose();
     },
@@ -87,25 +55,17 @@ const JoinTalkModalContent = (props: Props) => {
     }
   );
 
-  if (editMode && !roomUserInfo) {
-    return (
-      <View style={{ ...styles.container, alignItems: "center", justifyContent: "center" }}>
-        <ActivityIndicator />
-      </View>
-    );
-  }
-
   return (
     <FormProvider {...form}>
       <View style={styles.container}>
         <JoinTalkModalHeader title={title} />
         <View style={styles.bodyContainer}>
-          <JoinTalkModalProfileImage initialImageUrl={roomUserInfo?.profileUrl} editMode={editMode} />
+          <JoinTalkModalProfileImage />
           <JoinTalkModalNickname />
           <JoinTalkModalTeam leftTeam={leftTeam} rightTeam={rightTeam} />
         </View>
         <View style={styles.footerContainer}>
-          <JoinTalkModalButton editMode={editMode} handleSubmit={handleSubmit} />
+          <JoinTalkModalButton handleSubmit={handleSubmit} />
         </View>
       </View>
     </FormProvider>

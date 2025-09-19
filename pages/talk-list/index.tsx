@@ -1,26 +1,25 @@
-import React, { useState } from "react";
+import React from "react";
 import { View, Text, Pressable, FlatList, StyleSheet } from "react-native";
 import RoomCard from "./components/RoomCard/RoomCard";
 import useGetRoomList from "@/hooks/useGetRoomList";
 import useDisclosure from "@/hooks/useDisclosure";
 import CreateTalkModal from "./components/CreateTalkModal";
 import JoinTalkModal from "./components/JoinTalkModal";
+import useJoinTalkModal from "./hooks/useJoinTalkModal";
 
 export default function RoomList() {
-  const [roomId, setRoomId] = useState<number>();
-
   const { data } = useGetRoomList({
     options: {
       refetchOnMount: true,
     },
   });
 
-  const { isOpen: isOpenJoinTalkModal, handleOpen: handleOpenJoinTalkModal, handleClose: handleCloseJoinTalkModal } = useDisclosure();
   const { isOpen: isOpenCreateTalkModal, handleOpen: handleOpenCreateTalkModal, handleClose: handleCloseCreateTalkModal } = useDisclosure();
 
+  const { roomId, isOpenJoinTalkModal, handleCloseJoinTalkModal, handleOpenJoinTalkModal } = useJoinTalkModal();
+
   const handleClickJoinButton = (id: number) => {
-    setRoomId(id);
-    handleOpenJoinTalkModal();
+    handleOpenJoinTalkModal(id);
   };
 
   return (

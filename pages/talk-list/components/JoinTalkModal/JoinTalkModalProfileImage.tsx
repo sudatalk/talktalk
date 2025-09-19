@@ -5,14 +5,7 @@ import { JOIN_TALK_FORM_PATH } from "../../constants/joinTalkForm";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-type Props = {
-  initialImageUrl?: string;
-  editMode: boolean;
-};
-
-const JoinTalkModalProfileImage = (props: Props) => {
-  const { initialImageUrl, editMode } = props;
-
+const JoinTalkModalProfileImage = () => {
   const [list, setList] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -30,15 +23,11 @@ const JoinTalkModalProfileImage = (props: Props) => {
     (async () => {
       const response = await Promise.all(Array.from({ length: 6 }, (_, i) => axios.get(`https://picsum.photos/60?random=${Date.now()}-${i}`).then((res) => res.request.responseURL)));
 
-      if (editMode) {
-        setList([initialImageUrl, ...response.slice(0, 5)]);
-      } else {
-        setList(response);
-      }
+      setList(response);
 
       setIsLoading(false);
     })();
-  }, [initialImageUrl, editMode]);
+  }, []);
 
   const handleClick = (value: string) => {
     onChange(value);
