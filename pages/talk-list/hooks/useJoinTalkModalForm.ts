@@ -1,7 +1,5 @@
-import useGetRoomUserInfo from "@/hooks/useGetRoomUserInfo";
-import { useForm, useWatch } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { JOIN_TALK_FORM_DEFAULT_VALUES } from "../constants/joinTalkForm";
-import { useEffect } from "react";
 import Toast from "react-native-toast-message";
 import useJoinChat from "./useJoinChat";
 import useModifyChatUser from "./useModifyChatUser";

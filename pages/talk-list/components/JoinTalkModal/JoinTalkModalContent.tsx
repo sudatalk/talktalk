@@ -4,7 +4,7 @@ import JoinTalkModalButton from "./JoinTalkModalButton";
 import JoinTalkModalProfileImage from "./JoinTalkModalProfileImage";
 import JoinTalkModalNickname from "./JoinTalkModalNickname";
 import JoinTalkModalTeam from "./JoinTalkModalTeam";
-import { FormProvider, useWatch } from "react-hook-form";
+import { FormProvider } from "react-hook-form";
 import useGetRoom from "@/hooks/useGetRoom";
 import useJoinTalkModalForm from "../../hooks/useJoinTalkModalForm";
 import useGetRoomUserInfo from "@/hooks/useGetRoomUserInfo";
