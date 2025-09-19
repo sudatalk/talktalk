@@ -1,13 +1,13 @@
 import React from "react";
 import { View, Text, Pressable, FlatList, StyleSheet } from "react-native";
-import RoomCard from "./components/RoomCard/RoomCard";
 import useGetRoomList from "@/hooks/useGetRoomList";
 import useDisclosure from "@/hooks/useDisclosure";
 import CreateTalkModal from "./components/CreateTalkModal";
 import JoinTalkModal from "./components/JoinTalkModal";
 import useJoinTalkModal from "./hooks/useJoinTalkModal";
+import RoomCard from "./components/RoomCard/RoomCard";
 
-export default function RoomList() {
+export default function RoomListPage() {
   const { data } = useGetRoomList({
     options: {
       refetchOnMount: true,
@@ -38,7 +38,7 @@ export default function RoomList() {
         ItemSeparatorComponent={() => <View style={{ height: 24 }} />}
       />
       <CreateTalkModal isOpen={isOpenCreateTalkModal} handleClose={handleCloseCreateTalkModal} />
-      <JoinTalkModal roomId={roomId} userId={"dummy"} isOpen={isOpenJoinTalkModal} handleClose={handleCloseJoinTalkModal} />
+      <JoinTalkModal roomId={roomId} userId={"dummyb"} isOpen={isOpenJoinTalkModal} handleClose={handleCloseJoinTalkModal} />
     </>
   );
 }

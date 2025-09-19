@@ -4,6 +4,8 @@ import Toast from "react-native-toast-message";
 import useJoinChat from "./useJoinChat";
 import useModifyChatUser from "./useModifyChatUser";
 import { ChatResponse } from "@/types/chat";
+import { useNavigation } from "@react-navigation/native";
+import { RootStackNavigationProp } from "@/RootStack";
 
 type Props = {
   initialData?: ChatResponse;
@@ -14,6 +16,8 @@ type Props = {
 
 const useJoinTalkModalForm = (props: Props) => {
   const { initialData, userId, roomId, isEditMode } = props;
+
+  const navigation = useNavigation<RootStackNavigationProp>();
 
   const form = useForm({
     values: {
@@ -41,6 +45,8 @@ const useJoinTalkModalForm = (props: Props) => {
           await modifyChatUserAsync(params);
         } else {
           await joinChatAsync(params);
+
+          navigation.navigate("/room", { roomId, userId });
         }
 
         onSuccess();
