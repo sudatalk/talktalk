@@ -1,18 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, Pressable, FlatList, StyleSheet } from "react-native";
 import RoomCard from "./components/RoomCard/RoomCard";
 import useGetRoomList from "@/hooks/useGetRoomList";
-import { RoomResponse } from "@/types/room";
+import useDisclosure from "@/hooks/useDisclosure";
+import CreateTalkModal from "./components/CreateTalkModal";
+import JoinTalkModal from "./components/JoinTalkModal";
 
-type Props = {
-  roomList?: RoomResponse[];
-  setRoomId: (id: number) => void;
-  handleOpenJoinTalkModal: () => void;
-  handleOpenCreateTalkModal: () => void;
-};
+export default function RoomList() {
+  const [roomId, setRoomId] = useState<number>();
 
-export default function RoomList(props: Props) {
-  const { roomList, setRoomId, handleOpenJoinTalkModal, handleOpenCreateTalkModal } = props;
+  const { roomList, refetch } = useGetRoomList();
+
+  const { isOpen: isOpenJoinTalkModal, handleOpen: handleOpenJoinTalkModal, handleClose: handleCloseJoinTalkModal } = useDisclosure();
+  const { isOpen: isOpenCreateTalkModal, handleOpen: handleOpenCreateTalkModal, handleClose: handleCloseCreateTalkModal } = useDisclosure();
 
   const handleClickJoinButton = (id: number) => {
     setRoomId(id);
@@ -34,6 +34,8 @@ export default function RoomList(props: Props) {
         contentContainerStyle={styles.listContent}
         ItemSeparatorComponent={() => <View style={{ height: 24 }} />}
       />
+      <CreateTalkModal isOpen={isOpenCreateTalkModal} handleRefetchRoomList={refetch} handleClose={handleCloseCreateTalkModal} />
+      <JoinTalkModal roomId={roomId} isOpen={isOpenJoinTalkModal} handleRefetchRoomList={refetch} handleClose={handleCloseJoinTalkModal} />
     </>
   );
 }
