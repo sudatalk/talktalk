@@ -3,4 +3,4 @@ import { AxiosError, AxiosResponse } from "axios";
 
 export type Refetch<T> = (options?: RefetchOptions) => Promise<QueryObserverResult<T, AxiosError>>;
 
-export type UseQueryOptions<T, K> = Omit<BaseUseQueryOptions<T, AxiosError, K, QueryKey>, "queryKey" | "queryFn">;
+export type UseQueryOptions<T, K = T> = Omit<BaseUseQueryOptions<T, AxiosError, K, QueryKey>, "queryKey" | "queryFn">;

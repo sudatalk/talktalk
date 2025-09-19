@@ -7,11 +7,11 @@ export const getRoomListQueryKey: QueryKey = ["GET_ROOM_LIST"];
 
 const getRoomListQueryFn = getRoomList;
 
-type Props<T> = {
-  options?: UseQueryOptions<RoomResponse[], T>;
+type Props = {
+  options?: UseQueryOptions<RoomResponse[]>;
 };
 
-const useGetRoomList = <T = RoomResponse[]>(props: Props<T> = {}) => {
+const useGetRoomList = (props: Props = {}) => {
   const { options } = props;
 
   return useQuery({
