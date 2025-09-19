@@ -5,7 +5,7 @@ import useJoinChat from "./useJoinChat";
 import useModifyChatUser from "./useModifyChatUser";
 import { ChatResponse } from "@/types/chat";
 import { useNavigation } from "@react-navigation/native";
-import { RootStackNavigationProp } from "@/App";
+import { RootStackNavigationProp } from "@/RootStack";
 
 type Props = {
   initialData?: ChatResponse;

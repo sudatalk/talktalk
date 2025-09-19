@@ -1,5 +1,5 @@
-import { RootStackParamsList } from "@/App";
 import Text from "@/components/Text";
+import { RootStackParamsList } from "@/RootStack";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { View } from "react-native";
 
