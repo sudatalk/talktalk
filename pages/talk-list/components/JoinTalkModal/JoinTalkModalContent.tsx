@@ -12,16 +12,19 @@ import { postChatJoin, putChatUser } from "@/services/chat";
 import { Team } from "@/types/chat";
 import useGetRoomUserInfo from "@/hooks/useGetRoomUserInfo";
 import { useEffect } from "react";
+import { Refetch } from "@/types/base";
+import { RoomResponse } from "@/types/room";
+import useJoinChat from "../../hooks/useJoinChat";
+import useModifyChatUser from "../../hooks/useModifyChatUser";
 
 type Props = {
   roomId: number;
   userId?: string;
   handleClose: () => void;
-  handleRefetchRoomList: () => Promise<void>;
 };
 
 const JoinTalkModalContent = (props: Props) => {
-  const { roomId, userId, handleClose, handleRefetchRoomList } = props;
+  const { roomId, userId, handleClose } = props;
 
   const editMode = !!userId;
 
@@ -33,6 +36,9 @@ const JoinTalkModalContent = (props: Props) => {
   const form = useForm({
     defaultValues: JOIN_TALK_FORM_DEFAULT_VALUES,
   });
+
+  const { mutateAsync: joinChatAsync } = useJoinChat();
+  const { mutateAsync: modifyChatUserAsync } = useModifyChatUser();
 
   useEffect(() => {
     if (!roomUserInfo) return;
@@ -49,7 +55,7 @@ const JoinTalkModalContent = (props: Props) => {
       if (!roomId) return;
 
       if (editMode) {
-        await putChatUser({
+        await modifyChatUserAsync({
           userId: "dummy",
           roomId,
           nickname: value.nickname,
@@ -57,15 +63,13 @@ const JoinTalkModalContent = (props: Props) => {
           team: value.team as Team,
         });
       } else {
-        await postChatJoin({
+        await joinChatAsync({
           userId: "dummy",
           roomId,
           nickname: value.nickname,
           profileUrl: value.profileImageUrl,
           team: value.team as Team,
         });
-
-        handleRefetchRoomList();
       }
 
       handleClose();

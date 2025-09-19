@@ -9,14 +9,16 @@ import { ON_SUBMIT } from "@/constants/form";
 import CreateTalkModalButton from "./CreateTalkModalButton";
 import { postRoom } from "@/services/room";
 import Toast from "react-native-toast-message";
+import { Refetch } from "@/types/base";
+import { RoomResponse } from "@/types/room";
+import useCreateRoom from "../../hooks/useCreateRoom";
 
 type Props = {
   handleClose: () => void;
-  handleRefetchRoomList: () => Promise<void>;
 };
 
 const CreateTalkModalContent = (props: Props) => {
-  const { handleClose, handleRefetchRoomList } = props;
+  const { handleClose } = props;
 
   const form = useForm({
     defaultValues: CREATE_TALK_FORM_DEFAULT_VALUES,
@@ -24,18 +26,16 @@ const CreateTalkModalContent = (props: Props) => {
     reValidateMode: ON_SUBMIT,
   });
 
+  const { mutateAsync } = useCreateRoom();
+
   const handleSubmit = form.handleSubmit(
     async (value) => {
-      await postRoom({
+      await mutateAsync({
         title: value.title,
         leftTeam: value.leftTeam,
         rightTeam: value.rightTeam,
         duration: +value.duration,
       });
-
-      handleRefetchRoomList();
-
-      // TODO : 채팅방으로 바로 입장하게 할지 고민 필요
 
       handleClose();
     },

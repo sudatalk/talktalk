@@ -1,18 +1,19 @@
 import Modal from "@/components/Modal";
 import CreateTalkModalContent from "./CreateTalkModalContent";
+import { RoomResponse } from "@/types/room";
+import { Refetch } from "@/types/base";
 
 type Props = {
   isOpen: boolean;
   handleClose: () => void;
-  handleRefetchRoomList: () => Promise<void>;
 };
 
 const CreateTalkModal = (props: Props) => {
-  const { isOpen, handleClose, handleRefetchRoomList } = props;
+  const { isOpen, handleClose } = props;
 
   return (
     <Modal isOpen={isOpen} handleClose={handleClose}>
-      {isOpen && <CreateTalkModalContent handleClose={handleClose} handleRefetchRoomList={handleRefetchRoomList} />}
+      {isOpen && <CreateTalkModalContent handleClose={handleClose} />}
     </Modal>
   );
 };

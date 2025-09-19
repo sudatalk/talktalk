@@ -9,7 +9,11 @@ import JoinTalkModal from "./components/JoinTalkModal";
 export default function RoomList() {
   const [roomId, setRoomId] = useState<number>();
 
-  const { roomList, refetch } = useGetRoomList();
+  const { data } = useGetRoomList({
+    options: {
+      refetchOnMount: true,
+    },
+  });
 
   const { isOpen: isOpenJoinTalkModal, handleOpen: handleOpenJoinTalkModal, handleClose: handleCloseJoinTalkModal } = useDisclosure();
   const { isOpen: isOpenCreateTalkModal, handleOpen: handleOpenCreateTalkModal, handleClose: handleCloseCreateTalkModal } = useDisclosure();
@@ -28,14 +32,14 @@ export default function RoomList() {
         </Pressable>
       </View>
       <FlatList
-        data={roomList}
+        data={data}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => <RoomCard room={item} onPress={handleClickJoinButton} />}
         contentContainerStyle={styles.listContent}
         ItemSeparatorComponent={() => <View style={{ height: 24 }} />}
       />
-      <CreateTalkModal isOpen={isOpenCreateTalkModal} handleRefetchRoomList={refetch} handleClose={handleCloseCreateTalkModal} />
-      <JoinTalkModal roomId={roomId} isOpen={isOpenJoinTalkModal} handleRefetchRoomList={refetch} handleClose={handleCloseJoinTalkModal} />
+      <CreateTalkModal isOpen={isOpenCreateTalkModal} handleClose={handleCloseCreateTalkModal} />
+      <JoinTalkModal roomId={roomId} isOpen={isOpenJoinTalkModal} handleClose={handleCloseJoinTalkModal} />
     </>
   );
 }
