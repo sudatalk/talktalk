@@ -1,7 +1,5 @@
 import Modal from "@/components/Modal";
 import CreateTalkModalContent from "./CreateTalkModalContent";
-import { RoomResponse } from "@/types/room";
-import { Refetch } from "@/types/base";
 
 type Props = {
   isOpen: boolean;

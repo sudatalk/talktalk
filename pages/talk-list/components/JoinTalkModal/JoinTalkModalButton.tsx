@@ -1,7 +1,7 @@
 import Text from "@/components/Text";
-import { useFormContext, useWatch } from "react-hook-form";
+import { useWatch } from "react-hook-form";
 import { Pressable, StyleSheet, View } from "react-native";
-import { JOIN_TALK_FORM_DEFAULT_VALUES, JOIN_TALK_FORM_PATH } from "../../constants/joinTalkForm";
+import { JOIN_TALK_FORM_PATH } from "../../constants/joinTalkForm";
 
 type Props = {
   handleSubmit: () => void;

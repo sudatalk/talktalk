@@ -1,5 +1,5 @@
-import { QueryObserverResult, UseQueryOptions as BaseUseQueryOptions, QueryKey, UndefinedInitialDataOptions, RefetchOptions } from "@tanstack/react-query";
-import { AxiosError, AxiosResponse } from "axios";
+import { QueryObserverResult, UseQueryOptions as BaseUseQueryOptions, QueryKey, RefetchOptions } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 
 export type Refetch<T> = (options?: RefetchOptions) => Promise<QueryObserverResult<T, AxiosError>>;
 

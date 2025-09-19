@@ -7,10 +7,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { CREATE_TALK_FORM_DEFAULT_VALUES } from "../../constants/createTalkForm";
 import { ON_SUBMIT } from "@/constants/form";
 import CreateTalkModalButton from "./CreateTalkModalButton";
-import { postRoom } from "@/services/room";
 import Toast from "react-native-toast-message";
-import { Refetch } from "@/types/base";
-import { RoomResponse } from "@/types/room";
 import useCreateRoom from "../../hooks/useCreateRoom";
 
 type Props = {
