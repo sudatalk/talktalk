@@ -6,6 +6,8 @@ import CreateTalkModal from "./pages/talk-list/components/CreateTalkModal";
 import useDisclosure from "./hooks/useDisclosure";
 import Toast from "./components/Toast";
 import JoinTalkModal from "./pages/talk-list/components/JoinTalkModal";
+import { useState } from "react";
+import useGetRoomList from "./hooks/useGetRoomList";
 import RoomList from "./pages/talk-list";
 
 const SCREEN_HEIGHT = Dimensions.get("screen").height; // device height
@@ -14,17 +16,20 @@ const WINDOW_HEIGHT = Dimensions.get("window").height;
 const BOTTOM_NAVIGATION_BAR_HEIGHT = SCREEN_HEIGHT - WINDOW_HEIGHT;
 
 export default function App() {
-  const { isOpen: isOpenCreateTalkModal, handleOpen: handleOpenCreateTalkModal, handleClose: handleCloseCreateTalkModal } = useDisclosure();
+  const [roomId, setRoomId] = useState<number>();
+
+  const { roomList, refetch } = useGetRoomList();
 
   const { isOpen: isOpenJoinTalkModal, handleOpen: handleOpenJoinTalkModal, handleClose: handleCloseJoinTalkModal } = useDisclosure();
+  const { isOpen: isOpenCreateTalkModal, handleOpen: handleOpenCreateTalkModal, handleClose: handleCloseCreateTalkModal } = useDisclosure();
 
   return (
     <GestureHandlerRootView>
       <SafeAreaView style={styles.container}>
         <ExpoStatusBar style="light" />
-        <RoomList openJoinTalkModal={handleOpenJoinTalkModal} openCreateTalkModal={handleOpenCreateTalkModal} />
-        <CreateTalkModal isOpen={isOpenCreateTalkModal} handleClose={handleCloseCreateTalkModal} />
-        <JoinTalkModal isOpen={isOpenJoinTalkModal} handleClose={handleCloseJoinTalkModal} />
+        <RoomList roomList={roomList} setRoomId={setRoomId} handleOpenJoinTalkModal={handleOpenJoinTalkModal} handleOpenCreateTalkModal={handleOpenCreateTalkModal} />
+        <CreateTalkModal isOpen={isOpenCreateTalkModal} handleRefetchRoomList={refetch} handleClose={handleCloseCreateTalkModal} />
+        <JoinTalkModal roomId={roomId} isOpen={isOpenJoinTalkModal} handleRefetchRoomList={refetch} handleClose={handleCloseJoinTalkModal} />
         <Toast />
       </SafeAreaView>
     </GestureHandlerRootView>

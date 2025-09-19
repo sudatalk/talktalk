@@ -12,10 +12,11 @@ import Toast from "react-native-toast-message";
 
 type Props = {
   handleClose: () => void;
+  handleRefetchRoomList: () => Promise<void>;
 };
 
 const CreateTalkModalContent = (props: Props) => {
-  const { handleClose } = props;
+  const { handleClose, handleRefetchRoomList } = props;
 
   const form = useForm({
     defaultValues: CREATE_TALK_FORM_DEFAULT_VALUES,
@@ -25,16 +26,15 @@ const CreateTalkModalContent = (props: Props) => {
 
   const handleSubmit = form.handleSubmit(
     async (value) => {
-      const response = await postRoom({
+      await postRoom({
         title: value.title,
         leftTeam: value.leftTeam,
         rightTeam: value.rightTeam,
         duration: +value.duration,
       });
 
-      console.log("response : ", response.data);
+      handleRefetchRoomList();
 
-      // TODO : 목록 조회 API 리패칭
       // TODO : 채팅방으로 바로 입장하게 할지 고민 필요
 
       handleClose();

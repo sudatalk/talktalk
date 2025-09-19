@@ -1,14 +1,8 @@
 import { View, Text, StyleSheet } from "react-native";
-import { Room } from "@/types/room";
+import { Room, RoomResponse } from "@/types/room";
 import ProgressBar from "./ProgressBar";
 import FooterButton from "./FooterButton";
-export default function RoomCard({
-  room,
-  onPress,
-}: {
-  room: Room;
-  onPress: () => void;
-}) {
+export default function RoomCard({ room, onPress }: { room: RoomResponse; onPress: (id: number) => void }) {
   return (
     <View style={styles.card}>
       <Text style={styles.cardTitle} numberOfLines={2}>
@@ -19,13 +13,15 @@ export default function RoomCard({
           <Text style={styles.teamName}>{room.leftTeam}</Text>
           <Text style={styles.teamCount}>{room.leftCount}명</Text>
         </View>
-        <ProgressBar ratio={room.progress} />
-        <View style={[styles.team, { alignItems: "flex-end" }]}>
-          <Text style={styles.teamName} numberOfLines={2}>{room.rightTeam}</Text>
+        <ProgressBar room={room} />
+        <View style={[styles.team]}>
+          <Text style={styles.teamName} numberOfLines={2}>
+            {room.rightTeam}
+          </Text>
           <Text style={styles.teamCount}>{room.rightCount}명</Text>
         </View>
       </View>
-      <FooterButton room={room} onPress={onPress} />
+      <FooterButton room={room} onPress={() => onPress(room.id)} />
     </View>
   );
 }
@@ -55,6 +51,8 @@ const styles = StyleSheet.create({
   },
   team: {
     width: 80,
+
+    alignItems: "center",
   },
   teamName: {
     color: "#fff",

@@ -1,13 +1,18 @@
+import { RoomResponse } from "@/types/room";
 import { View, StyleSheet } from "react-native";
 
-export default function ProgressBar({ ratio }: { ratio: number }) {
-  const grayRatio = Math.min(Math.max(ratio, 0), 1);
+export default function ProgressBar({ room }: { room: RoomResponse }) {
+  const leftRatio = room.leftCount / (room.leftCount + room.rightCount);
+  const rightRatio = room.rightCount / (room.leftCount + room.rightCount);
 
   return (
     <View style={styles.barWrapper}>
-      <View style={styles.barBg} />
-      <View style={[styles.barWhite, { width: `${(1 - grayRatio) * 100}%` }]} />
-      <View style={[styles.barGray, { width: `${grayRatio * 100}%` }]} />
+      <View style={{ ...styles.barBg, justifyContent: "flex-end" }}>
+        <View style={[styles.barWhite, { flex: leftRatio }]} />
+      </View>
+      <View style={{ ...styles.barBg, justifyContent: "flex-start" }}>
+        <View style={[styles.barGray, { flex: rightRatio }]} />
+      </View>
     </View>
   );
 }
@@ -19,22 +24,29 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     overflow: "hidden",
     position: "relative",
+
+    justifyContent: "center",
+    alignItems: "center",
+
+    flexDirection: "row",
+
+    backgroundColor: "#1a1a1a",
   },
   barBg: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(255,255,255,0.1)",
+    flex: 0.5,
+    height: "100%",
     borderRadius: 8,
+
+    flexDirection: "row",
   },
   barWhite: {
-    position: "absolute",
-    left: 0,
-    height: 12,
     backgroundColor: "#fff",
+    borderTopLeftRadius: 8,
+    borderBottomLeftRadius: 8,
   },
   barGray: {
-    position: "absolute",
-    right: 0,
-    height: 12,
-    backgroundColor: "#4a4a4a",
+    backgroundColor: "#808080",
+    borderTopRightRadius: 8,
+    borderBottomRightRadius: 8,
   },
 });

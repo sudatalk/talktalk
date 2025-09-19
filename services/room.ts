@@ -9,3 +9,7 @@ export function postRoom(params: PostRoomParams): Promise<AxiosResponse<RoomResp
 export function getRoomDetail(params: GetRoomDetailParams): Promise<AxiosResponse<RoomResponse>> {
   return axios.get<RoomResponse>(`${API_HOST}/room/${params.id}`);
 }
+
+export function getRoomList(): Promise<AxiosResponse<RoomResponse[]>> {
+  return axios.get<RoomResponse[]>(`${API_HOST}/room`);
+}

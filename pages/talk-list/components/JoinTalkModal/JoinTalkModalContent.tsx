@@ -12,14 +12,16 @@ import { postChatJoin } from "@/services/chat";
 import { Team } from "@/types/chat";
 
 type Props = {
+  roomId: number;
   handleClose: () => void;
+  handleRefetchRoomList: () => Promise<void>;
 };
 
 const JoinTalkModalContent = (props: Props) => {
-  const { handleClose } = props;
+  const { roomId, handleClose, handleRefetchRoomList } = props;
 
-  const { room } = useGetRoom({ id: 1 });
-  const { id: roomId, title, leftTeam, rightTeam } = room || {};
+  const { room } = useGetRoom({ id: roomId });
+  const { title, leftTeam, rightTeam } = room || {};
 
   const form = useForm({
     defaultValues: JOIN_TALK_FORM_DEFAULT_VALUES,
@@ -37,6 +39,7 @@ const JoinTalkModalContent = (props: Props) => {
         team: value.team as Team,
       });
 
+      handleRefetchRoomList();
       handleClose();
     },
     (error) => {
