@@ -3,8 +3,11 @@ import { StatusBar as ExpoStatusBar } from "expo-status-bar";
 import { SafeAreaView, StyleSheet } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Toast from "./components/Toast";
-import RoomList from "./pages/talk-list";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { createNativeStackNavigator, NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { DarkTheme, NavigationContainer } from "@react-navigation/native";
+import RoomListPage from "./pages/talk/list";
+import RoomPage from "./pages/talk/room";
 
 const SCREEN_HEIGHT = Dimensions.get("screen").height; // device height
 const STATUS_BAR_HEIGHT = StatusBar.currentHeight || 24;
@@ -13,17 +16,37 @@ const BOTTOM_NAVIGATION_BAR_HEIGHT = SCREEN_HEIGHT - WINDOW_HEIGHT;
 
 const queryClient = new QueryClient();
 
+export type RootStackParamsList = {
+  "/": undefined;
+  "/room": { roomId: number; userId: string };
+};
+
+export type RootStackNavigationProp = NativeStackNavigationProp<RootStackParamsList>;
+
+const Stack = createNativeStackNavigator<RootStackParamsList>();
+
+function RootStack() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="/" component={RoomListPage} />
+      <Stack.Screen name="/room" component={RoomPage} />
+    </Stack.Navigator>
+  );
+}
+
 export default function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <GestureHandlerRootView>
-        <SafeAreaView style={styles.container}>
-          <ExpoStatusBar style="light" />
-          <RoomList />
-          <Toast />
-        </SafeAreaView>
-      </GestureHandlerRootView>
-    </QueryClientProvider>
+    <NavigationContainer theme={DarkTheme}>
+      <QueryClientProvider client={queryClient}>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <SafeAreaView style={styles.container}>
+            <ExpoStatusBar style="light" />
+            <RootStack />
+            <Toast />
+          </SafeAreaView>
+        </GestureHandlerRootView>
+      </QueryClientProvider>
+    </NavigationContainer>
   );
 }
 
