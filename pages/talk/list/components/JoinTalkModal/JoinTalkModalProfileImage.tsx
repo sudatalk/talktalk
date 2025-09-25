@@ -4,13 +4,7 @@ import { ActivityIndicator, Image, Pressable, StyleSheet, View } from "react-nat
 import { JOIN_TALK_FORM_PATH } from "../../constants/joinTalkForm";
 import useRandomImage from "../../hooks/useRandomImage";
 
-type Props = {
-  profileUrl?: string;
-};
-
-const JoinTalkModalProfileImage = (props: Props) => {
-  const { profileUrl } = props;
-
+const JoinTalkModalProfileImage = () => {
   const {
     field: { value, onChange },
   } = useController({
@@ -22,7 +16,7 @@ const JoinTalkModalProfileImage = (props: Props) => {
 
   const { data, isFetching } = useRandomImage();
 
-  const imageList = [profileUrl, ...(data || [])].filter((v): v is string => !!v).slice(0, 6);
+  const imageList = data?.filter(Boolean);
 
   const handleClick = (value: string) => {
     onChange(value);

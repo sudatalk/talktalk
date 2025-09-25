@@ -7,38 +7,27 @@ import JoinTalkModalTeam from "./JoinTalkModalTeam";
 import { FormProvider } from "react-hook-form";
 import useGetRoom from "@/hooks/useGetRoom";
 import useJoinTalkModalForm from "../../hooks/useJoinTalkModalForm";
-import useGetRoomUserInfo from "@/hooks/useGetRoomUserInfo";
 
 type Props = {
-  userId: string;
   roomId: number;
-  isEditMode?: boolean;
+  userId?: string;
   handleClose: () => void;
 };
 
 const JoinTalkModalContent = (props: Props) => {
-  const { roomId, userId, isEditMode = false, handleClose } = props;
+  const { roomId, userId, handleClose } = props;
 
   const { data: room } = useGetRoom({ id: roomId });
   const { title, leftTeam, rightTeam } = room || {};
 
-  const { data: roomUserInfo } = useGetRoomUserInfo({
-    roomId,
-    userId,
-    options: {
-      enabled: isEditMode && !!roomId && !!userId,
-      refetchOnMount: true,
-    },
-  });
-
-  const { form, handleSubmit } = useJoinTalkModalForm({ initialData: roomUserInfo, userId, roomId, isEditMode });
+  const { form, handleSubmit } = useJoinTalkModalForm({ userId, roomId });
 
   return (
     <FormProvider {...form}>
       <View style={styles.container}>
         <JoinTalkModalHeader title={title} />
         <View style={styles.bodyContainer}>
-          <JoinTalkModalProfileImage profileUrl={roomUserInfo?.profileUrl} />
+          <JoinTalkModalProfileImage />
           <JoinTalkModalNickname />
           <JoinTalkModalTeam leftTeam={leftTeam} rightTeam={rightTeam} />
         </View>

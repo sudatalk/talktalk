@@ -25,3 +25,8 @@ export type RoomResponse = {
 export type GetRoomDetailParams = {
   id: number;
 };
+
+export type GetRoomListParams = {
+  size?: number;
+  page?: number;
+};

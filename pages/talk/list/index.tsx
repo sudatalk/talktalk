@@ -6,13 +6,18 @@ import CreateTalkModal from "./components/CreateTalkModal";
 import JoinTalkModal from "./components/JoinTalkModal";
 import useJoinTalkModal from "./hooks/useJoinTalkModal";
 import RoomCard from "./components/RoomCard/RoomCard";
+import { useDeviceId } from "@/hooks/useDeviceId";
 
 export default function RoomListPage() {
   const { data } = useGetRoomList({
+    page: 0,
+    size: 10,
     options: {
       refetchOnMount: true,
     },
   });
+
+  const userId = useDeviceId();
 
   const { isOpen: isOpenCreateTalkModal, handleOpen: handleOpenCreateTalkModal, handleClose: handleCloseCreateTalkModal } = useDisclosure();
 
@@ -38,7 +43,7 @@ export default function RoomListPage() {
         ItemSeparatorComponent={() => <View style={{ height: 24 }} />}
       />
       <CreateTalkModal isOpen={isOpenCreateTalkModal} handleClose={handleCloseCreateTalkModal} />
-      <JoinTalkModal roomId={roomId} userId={"dummyb"} isOpen={isOpenJoinTalkModal} handleClose={handleCloseJoinTalkModal} />
+      <JoinTalkModal roomId={roomId} userId={userId} isOpen={isOpenJoinTalkModal} handleClose={handleCloseJoinTalkModal} />
     </>
   );
 }

@@ -2,33 +2,24 @@ import { useForm } from "react-hook-form";
 import { JOIN_TALK_FORM_DEFAULT_VALUES } from "../constants/joinTalkForm";
 import Toast from "react-native-toast-message";
 import useJoinChat from "./useJoinChat";
-import useModifyChatUser from "./useModifyChatUser";
-import { ChatResponse } from "@/types/chat";
 import { useNavigation } from "@react-navigation/native";
 import { RootStackNavigationProp } from "@/RootStack";
 
 type Props = {
-  initialData?: ChatResponse;
-  userId: string;
+  userId?: string;
   roomId: number;
-  isEditMode: boolean;
 };
 
 const useJoinTalkModalForm = (props: Props) => {
-  const { initialData, userId, roomId, isEditMode } = props;
+  const { userId, roomId } = props;
 
   const navigation = useNavigation<RootStackNavigationProp>();
 
   const form = useForm({
-    values: {
-      ...JOIN_TALK_FORM_DEFAULT_VALUES,
-      ...initialData,
-      isEditMode,
-    },
+    defaultValues: JOIN_TALK_FORM_DEFAULT_VALUES,
   });
 
   const { mutateAsync: joinChatAsync } = useJoinChat();
-  const { mutateAsync: modifyChatUserAsync } = useModifyChatUser();
 
   const handleSubmit = ({ onSuccess }: { onSuccess: () => void }) =>
     form.handleSubmit(
@@ -41,13 +32,9 @@ const useJoinTalkModalForm = (props: Props) => {
           ...value,
         };
 
-        if (value.isEditMode) {
-          await modifyChatUserAsync(params);
-        } else {
-          await joinChatAsync(params);
+        await joinChatAsync(params);
 
-          navigation.navigate("/room", { roomId, userId });
-        }
+        navigation.navigate("/room", { roomId, userId });
 
         onSuccess();
       },
