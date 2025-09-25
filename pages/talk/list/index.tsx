@@ -1,21 +1,15 @@
 import React from "react";
-import { View, Text, Pressable, FlatList, StyleSheet } from "react-native";
+import { View, Text, Pressable, StyleSheet } from "react-native";
 import useGetRoomList from "@/hooks/useGetRoomList";
 import useDisclosure from "@/hooks/useDisclosure";
 import CreateTalkModal from "./components/CreateTalkModal";
 import JoinTalkModal from "./components/JoinTalkModal";
 import useJoinTalkModal from "./hooks/useJoinTalkModal";
-import RoomCard from "./components/RoomCard/RoomCard";
 import { useDeviceId } from "@/hooks/useDeviceId";
+import RoomList from "./components/RoomList";
 
 export default function RoomListPage() {
-  const { data } = useGetRoomList({
-    page: 0,
-    size: 10,
-    options: {
-      refetchOnMount: true,
-    },
-  });
+  const { roomList, fetchNextPage, hasNextPage, isFetchingNextPage } = useGetRoomList();
 
   const userId = useDeviceId();
 
@@ -27,6 +21,12 @@ export default function RoomListPage() {
     handleOpenJoinTalkModal(id);
   };
 
+  const handleEndReached = () => {
+    if (!hasNextPage) return;
+
+    fetchNextPage();
+  };
+
   return (
     <>
       <View style={styles.header}>
@@ -35,13 +35,7 @@ export default function RoomListPage() {
           <Text style={styles.createButtonText}>방 만들기</Text>
         </Pressable>
       </View>
-      <FlatList
-        data={data}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => <RoomCard room={item} onPress={handleClickJoinButton} />}
-        contentContainerStyle={styles.listContent}
-        ItemSeparatorComponent={() => <View style={{ height: 24 }} />}
-      />
+      <RoomList data={roomList} handleClickJoinButton={handleClickJoinButton} handleEndReached={handleEndReached} isLoading={isFetchingNextPage} />
       <CreateTalkModal isOpen={isOpenCreateTalkModal} handleClose={handleCloseCreateTalkModal} />
       <JoinTalkModal roomId={roomId} userId={userId} isOpen={isOpenJoinTalkModal} handleClose={handleCloseJoinTalkModal} />
     </>
@@ -75,9 +69,5 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 14,
     fontWeight: "700",
-  },
-  listContent: {
-    paddingHorizontal: 10,
-    paddingVertical: 16,
   },
 });

@@ -10,6 +10,12 @@ export enum RoomStatus {
   OFF = "OFF",
 }
 
+export type PaginationRoomResponse = {
+  currentPage: number;
+  totalPage: number;
+  data: RoomResponse[];
+};
+
 export type RoomResponse = {
   id: number;
   title: string;

@@ -1,7 +1,5 @@
 import { getRoomList } from "@/services/room";
-import { UseQueryOptions } from "@/types/base";
-import { RoomResponse } from "@/types/room";
-import { QueryKey, useQuery } from "@tanstack/react-query";
+import { QueryKey, useInfiniteQuery } from "@tanstack/react-query";
 
 export const getRoomListQueryKey: QueryKey = ["GET_ROOM_LIST"];
 
@@ -10,17 +8,23 @@ const getRoomListQueryFn = getRoomList;
 type Props = {
   page?: number;
   size?: number;
-  options?: UseQueryOptions<RoomResponse[]>;
 };
 
 const useGetRoomList = (props: Props = {}) => {
-  const { page, size, options } = props;
+  const { page, size } = props;
 
-  return useQuery({
+  const result = useInfiniteQuery({
     queryKey: getRoomListQueryKey,
-    queryFn: () => getRoomListQueryFn({ page, size }),
-    ...options,
+    queryFn: ({ pageParam }) => getRoomListQueryFn({ page: pageParam, size }),
+    initialPageParam: page,
+    getNextPageParam: (lastPage) => {
+      if (lastPage.currentPage === lastPage.totalPage) return;
+
+      return lastPage.currentPage + 1;
+    },
   });
+
+  return { ...result, roomList: result.data?.pages.flatMap((value) => value.data) };
 };
 
 export default useGetRoomList;

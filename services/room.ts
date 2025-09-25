@@ -1,4 +1,4 @@
-import { GetRoomDetailParams, GetRoomListParams, PostRoomParams, RoomResponse } from "@/types/room";
+import { GetRoomDetailParams, GetRoomListParams, PaginationRoomResponse, PostRoomParams, RoomResponse } from "@/types/room";
 import { API_HOST } from "./host";
 import { api } from "@/utils/api";
 
@@ -10,6 +10,6 @@ export function getRoomDetail(params: GetRoomDetailParams): Promise<RoomResponse
   return api.get(`${API_HOST}/room/${params.id}`);
 }
 
-export function getRoomList(params: GetRoomListParams): Promise<RoomResponse[]> {
+export function getRoomList(params: GetRoomListParams): Promise<PaginationRoomResponse> {
   return api.get(`${API_HOST}/room`, { params });
 }

@@ -32,7 +32,7 @@ const JoinTalkModalProfileImage = () => {
           <ActivityIndicator style={{ paddingTop: 15 }} />
         ) : (
           <>
-            {imageList.map((url, index) => {
+            {imageList?.map((url, index) => {
               const isSelected = value === url;
 
               return (
