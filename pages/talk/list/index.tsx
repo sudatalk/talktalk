@@ -7,6 +7,12 @@ import JoinTalkModal from "./components/JoinTalkModal";
 import useJoinTalkModal from "./hooks/useJoinTalkModal";
 import { useDeviceId } from "@/hooks/useDeviceId";
 import RoomList from "./components/RoomList";
+import { useQueryClient } from "@tanstack/react-query";
+import { getRoomUserInfoQueryFn, getRoomUserInfoQueryKey } from "@/hooks/useGetRoomUserInfo";
+import { getErrorData } from "@/utils/error";
+import { NOT_FOUND_ROOM_USER_INFO_CODE } from "./constants/error";
+import { RootStackNavigationProp } from "@/RootStack";
+import { useNavigation } from "@react-navigation/native";
 
 export default function RoomListPage() {
   const { roomList, fetchNextPage, hasNextPage, isFetchingNextPage } = useGetRoomList({
@@ -21,8 +27,26 @@ export default function RoomListPage() {
 
   const { roomId, isOpenJoinTalkModal, handleCloseJoinTalkModal, handleOpenJoinTalkModal } = useJoinTalkModal();
 
-  const handleClickJoinButton = (id: number) => {
-    handleOpenJoinTalkModal(id);
+  const queryClient = useQueryClient();
+  const navigation = useNavigation<RootStackNavigationProp>();
+
+  const handleClickJoinButton = async (roomId: number) => {
+    if (!userId) return;
+
+    try {
+      await queryClient.fetchQuery({
+        queryKey: getRoomUserInfoQueryKey({ roomId, userId }),
+        queryFn: () => getRoomUserInfoQueryFn(roomId, userId),
+      });
+
+      navigation.navigate("/room", { roomId, userId });
+    } catch (error) {
+      const { status } = getErrorData(error);
+
+      if (status === NOT_FOUND_ROOM_USER_INFO_CODE) {
+        handleOpenJoinTalkModal(roomId);
+      }
+    }
   };
 
   const handleEndReached = () => {

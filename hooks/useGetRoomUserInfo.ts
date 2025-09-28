@@ -9,9 +9,9 @@ type Props = {
   options?: UseQueryOptions<ChatResponse>;
 };
 
-const getRoomUserInfoQueryKey = (props: Props) => ["GET_ROOM_USER_INFO", props];
+export const getRoomUserInfoQueryKey = (props: Props) => ["GET_ROOM_USER_INFO", props];
 
-const getRoomUserInfoQueryFn = (roomId: number, userId: string) => getChatUser({ roomId, userId });
+export const getRoomUserInfoQueryFn = (roomId: number, userId: string) => getChatUser({ roomId, userId });
 
 const useGetRoomUserInfo = (props: Props) => {
   const { roomId, userId, options } = props;
