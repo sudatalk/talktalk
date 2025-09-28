@@ -1,5 +1,7 @@
 import Text from "@/components/Text";
-import { Pressable, StyleSheet, View } from "react-native";
+import { Image, Pressable, StyleSheet, View } from "react-native";
+
+const closeIcon = require("assets/icon/closeIcon.webp");
 
 type Props = {
   handleClose: () => void;
@@ -14,9 +16,13 @@ const TeamChangeModalTitle = (props: Props) => {
         팀 바꾸기
       </Text>
       <Pressable onPress={handleClose}>
-        <Text white h3 bold>
-          X
-        </Text>
+        <Image
+          source={closeIcon}
+          style={{
+            width: 26,
+            height: 26,
+          }}
+        />
       </Pressable>
     </View>
   );
