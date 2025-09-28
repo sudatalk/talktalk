@@ -1,8 +1,11 @@
 import { getRoomDetail } from "@/services/room";
+import { UseQueryOptions } from "@/types/base";
+import { RoomResponse } from "@/types/room";
 import { useQuery } from "@tanstack/react-query";
 
 type Props = {
   id: number;
+  options?: UseQueryOptions<RoomResponse>;
 };
 
 const getRoomDetailQueryKey = (props: Props) => ["GET_ROOM_DETAIL", props];
@@ -12,6 +15,7 @@ const useGetRoom = (props: Props) => {
   return useQuery({
     queryKey: getRoomDetailQueryKey(props),
     queryFn: getRoomDetailQueryFn(props),
+    ...props.options,
   });
 };
 
