@@ -13,7 +13,7 @@ const JoinTalkModal = (props: Props) => {
 
   return (
     <Modal isOpen={isOpen} handleClose={handleClose}>
-      {isOpen && roomId && userId && <JoinTalkModalContent roomId={roomId} userId={userId} handleClose={handleClose} />}
+      {isOpen && roomId && <JoinTalkModalContent roomId={roomId} userId={userId} handleClose={handleClose} />}
     </Modal>
   );
 };

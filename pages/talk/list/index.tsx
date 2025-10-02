@@ -1,25 +1,58 @@
 import React from "react";
-import { View, Text, Pressable, FlatList, StyleSheet } from "react-native";
+import { View, Text, Pressable, StyleSheet } from "react-native";
 import useGetRoomList from "@/hooks/useGetRoomList";
 import useDisclosure from "@/hooks/useDisclosure";
 import CreateTalkModal from "./components/CreateTalkModal";
 import JoinTalkModal from "./components/JoinTalkModal";
 import useJoinTalkModal from "./hooks/useJoinTalkModal";
-import RoomCard from "./components/RoomCard/RoomCard";
+import { useDeviceId } from "@/hooks/useDeviceId";
+import RoomList from "./components/RoomList";
+import { useQueryClient } from "@tanstack/react-query";
+import { getRoomUserInfoQueryFn, getRoomUserInfoQueryKey } from "@/hooks/useGetRoomUserInfo";
+import { getErrorData } from "@/utils/error";
+import { NOT_FOUND_ROOM_USER_INFO_CODE } from "./constants/error";
+import { RootStackNavigationProp } from "@/RootStack";
+import { useNavigation } from "@react-navigation/native";
 
 export default function RoomListPage() {
-  const { data } = useGetRoomList({
+  const { roomList, fetchNextPage, hasNextPage, isFetchingNextPage } = useGetRoomList({
     options: {
       refetchOnMount: true,
     },
   });
 
+  const userId = useDeviceId();
+
   const { isOpen: isOpenCreateTalkModal, handleOpen: handleOpenCreateTalkModal, handleClose: handleCloseCreateTalkModal } = useDisclosure();
 
   const { roomId, isOpenJoinTalkModal, handleCloseJoinTalkModal, handleOpenJoinTalkModal } = useJoinTalkModal();
 
-  const handleClickJoinButton = (id: number) => {
-    handleOpenJoinTalkModal(id);
+  const queryClient = useQueryClient();
+  const navigation = useNavigation<RootStackNavigationProp>();
+
+  const handleClickJoinButton = async (roomId: number) => {
+    if (!userId) return;
+
+    try {
+      await queryClient.fetchQuery({
+        queryKey: getRoomUserInfoQueryKey({ roomId, userId }),
+        queryFn: () => getRoomUserInfoQueryFn(roomId, userId),
+      });
+
+      navigation.navigate("/room", { roomId, userId });
+    } catch (error) {
+      const { status } = getErrorData(error);
+
+      if (status === NOT_FOUND_ROOM_USER_INFO_CODE) {
+        handleOpenJoinTalkModal(roomId);
+      }
+    }
+  };
+
+  const handleEndReached = () => {
+    if (!hasNextPage) return;
+
+    fetchNextPage();
   };
 
   return (
@@ -30,15 +63,9 @@ export default function RoomListPage() {
           <Text style={styles.createButtonText}>방 만들기</Text>
         </Pressable>
       </View>
-      <FlatList
-        data={data}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => <RoomCard room={item} onPress={handleClickJoinButton} />}
-        contentContainerStyle={styles.listContent}
-        ItemSeparatorComponent={() => <View style={{ height: 24 }} />}
-      />
+      <RoomList data={roomList} handleClickJoinButton={handleClickJoinButton} handleEndReached={handleEndReached} isLoading={isFetchingNextPage} />
       <CreateTalkModal isOpen={isOpenCreateTalkModal} handleClose={handleCloseCreateTalkModal} />
-      <JoinTalkModal roomId={roomId} userId={"dummyb"} isOpen={isOpenJoinTalkModal} handleClose={handleCloseJoinTalkModal} />
+      <JoinTalkModal roomId={roomId} userId={userId} isOpen={isOpenJoinTalkModal} handleClose={handleCloseJoinTalkModal} />
     </>
   );
 }
@@ -70,9 +97,5 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 14,
     fontWeight: "700",
-  },
-  listContent: {
-    paddingHorizontal: 10,
-    paddingVertical: 16,
   },
 });

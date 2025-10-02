@@ -1,0 +1,1 @@
+export const NOT_FOUND_ROOM_USER_INFO_CODE = 404;
