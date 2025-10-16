@@ -1,13 +1,19 @@
-import Text from "@/components/Text";
-import useDisclosure from "@/hooks/useDisclosure";
-import { RootStackParamsList } from "@/RootStack";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Button, View } from "react-native";
-import TeamChangeModal from "./components/TeamChangeModal";
-import useGetRoomUserInfo from "@/hooks/useGetRoomUserInfo";
-import useGetRoom from "@/hooks/useGetRoom";
+import React from 'react';
+import { SafeAreaView, View, StyleSheet } from 'react-native';
+import ChatHeader from './components/ChatHeader';
+import ChatMeter from './components/ChatMeter';
+import ChatBubble from './components/ChatBubble';
+import ChatInput from './components/ChatInput';
+import ChatSystemMessage from './components/ChatSystemMessage';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamsList } from '@/RootStack';
+import useGetRoomUserInfo from '@/hooks/useGetRoomUserInfo';
+import useGetRoom from '@/hooks/useGetRoom';
+import useDisclosure from '@/hooks/useDisclosure';
+import TeamChangeModal from './components/TeamChangeModal';
 
-const RoomPage = (props: NativeStackScreenProps<RootStackParamsList, "/room">) => {
+const profileImage = require('assets/icon.png');
+export default function RoomPage(props: NativeStackScreenProps<RootStackParamsList, "/room">) {
   const { route } = props;
 
   const { roomId, userId } = route.params;
@@ -22,20 +28,22 @@ const RoomPage = (props: NativeStackScreenProps<RootStackParamsList, "/room">) =
   });
 
   return (
-    <View>
-      <Text white>룸 페이지</Text>
-      <Text white>roomId: {roomId}</Text>
-      <Text white>userId: {userId}</Text>
-      <Button title="팀 변경 버튼" onPress={handleOpen} />
+    <SafeAreaView style={styles.safe}>
+      <ChatHeader />
+      <ChatMeter />
 
-      <Text white>title : {roomInfo?.title}</Text>
+      <ChatBubble team="left" nickname="닉네임" text="가나다라마" profileImage={profileImage} />
+      <ChatBubble team="right" nickname="닉네임" text="가나다라마" profileImage={profileImage} />
 
-      <Text white>nickname : {userInfo?.nickname}</Text>
-      <Text white>team : {userInfo?.team}</Text>
+      <ChatSystemMessage text="닉네임1 님이 입장하셨습니다." />
 
+      <View style={{ flex: 1 }} />
+      <ChatInput onPlusPress={handleOpen}/>
       <TeamChangeModal roomId={roomId} userId={userId} isOpen={isOpen} handleClose={handleClose} />
-    </View>
+    </SafeAreaView>
   );
-};
+}
 
-export default RoomPage;
+const styles = StyleSheet.create({
+  safe: { flex: 1, backgroundColor: '#050505' },
+});
