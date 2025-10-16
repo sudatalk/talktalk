@@ -1,14 +1,10 @@
 import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 
-type Props = {
-  onPlusPress?: () => void;
-  onSendPress?: () => void;
-};
-export default function ChatInput({ onPlusPress, onSendPress }: Props) {
+export default function ChatInput() {
   return (
     <View style={styles.inputBar}>
-      <TouchableOpacity style={styles.plusBtn} onPress={onPlusPress}>
+      <TouchableOpacity style={styles.plusBtn}>
         <Text style={styles.plusText}>＋</Text>
       </TouchableOpacity>
 
