@@ -1,7 +1,9 @@
 import { getRoomList } from "@/services/room";
 import { UseInfiniteQueryOptions } from "@/types/base";
 import { PaginationRoomResponse } from "@/types/room";
+import { useFocusEffect } from "@react-navigation/native";
 import { QueryKey, useInfiniteQuery } from "@tanstack/react-query";
+import { useCallback } from "react";
 
 export const getRoomListQueryKey: QueryKey = ["GET_ROOM_LIST"];
 
@@ -27,6 +29,12 @@ const useGetRoomList = (props: Props = {}) => {
     },
     ...options,
   });
+
+  useFocusEffect(
+    useCallback(() => {
+      result.refetch();
+    }, [])
+  );
 
   return { ...result, roomList: result.data?.pages.flatMap((value) => value.data) };
 };
