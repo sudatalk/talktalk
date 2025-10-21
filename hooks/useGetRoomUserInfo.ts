@@ -1,7 +1,9 @@
 import { getChatUser } from "@/services/chat";
 import { UseQueryOptions } from "@/types/base";
 import { ChatResponse } from "@/types/chat";
+import { useFocusEffect } from "@react-navigation/native";
 import { skipToken, useQuery } from "@tanstack/react-query";
+import { useCallback } from "react";
 
 type Props = {
   roomId?: number;
@@ -16,11 +18,19 @@ export const getRoomUserInfoQueryFn = (roomId: number, userId: string) => getCha
 const useGetRoomUserInfo = (props: Props) => {
   const { roomId, userId, options } = props;
 
-  return useQuery({
+  const result = useQuery({
     queryKey: getRoomUserInfoQueryKey(props),
     queryFn: roomId && userId ? () => getRoomUserInfoQueryFn(roomId, userId) : skipToken,
     ...options,
   });
+
+  useFocusEffect(
+    useCallback(() => {
+      result.refetch();
+    }, [])
+  );
+
+  return result;
 };
 
 export default useGetRoomUserInfo;
