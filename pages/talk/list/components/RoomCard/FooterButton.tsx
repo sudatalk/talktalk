@@ -1,20 +1,19 @@
-import { RoomResponse, RoomStatus } from "@/types/room";
-import { formatTime } from "@/utils/date";
+import { RoomResponse } from "@/types/room";
 import { Pressable, Text, StyleSheet } from "react-native";
-
+import { formatTime } from "@/utils/date";
 import { View } from "react-native";
 
-export default function FooterButton({ room, onPress }: { room: RoomResponse; onPress: () => void }) {
+export default function FooterButton({ room, onPress, isEnded }: { room: RoomResponse; onPress: () => void; isEnded: boolean }) {
   return (
     <View style={styles.footerRow}>
-      {room.status === RoomStatus.ON ? (
+      {isEnded ? (
+        <Text style={styles.endedText}>종료됨</Text>
+      ) : (
         <Pressable style={styles.joinButton} onPress={onPress}>
           <Text style={styles.joinText}>참여하기</Text>
         </Pressable>
-      ) : (
-        <Text style={styles.endedText}>종료됨</Text>
       )}
-      {room.expiredAt && <Text style={styles.expiredAtText}>{formatTime(room.expiredAt)}에 종료</Text>}
+      {!isEnded && room.expiredAt && <Text style={styles.expiredAtText}>{formatTime(room.expiredAt)}에 종료</Text>}
     </View>
   );
 }
