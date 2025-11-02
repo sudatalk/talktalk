@@ -2,10 +2,10 @@ import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 
 type ChatBubbleProps = {
-  team: 'left' | 'right';
-  nickname: string;
-  text: string;
-  profileImage: any; // require() or { uri: string }
+  team?: string;
+  nickname?: string;
+  text?: string;
+  profileImage?: any; // require() or { uri: string }
 };
 
 export default function ChatBubble({ team, nickname, text, profileImage }: ChatBubbleProps) {
@@ -14,13 +14,12 @@ export default function ChatBubble({ team, nickname, text, profileImage }: ChatB
   return (
     <View style={[styles.container, isLeft ? styles.leftAlign : styles.rightAlign]}>
       <View style={[isLeft ? styles.rowLeft : styles.rowRight]}>
-        <Image source={profileImage} style={styles.badge} />
+        <Image source={{ uri: profileImage }} style={styles.badge} />
 
         <View style={[styles.textColumn, isLeft ? styles.textLeft : styles.textRight]}>
           <Text style={[styles.nickname, isLeft ? styles.nickLeft : styles.nickRight]}>
             {nickname}
           </Text>
-
           <View style={[styles.bubbleWrapper, isLeft ? styles.alignLeft : styles.alignRight]}>
             <View style={[styles.bubble, isLeft ? styles.bubbleLeft : styles.bubbleRight]}>
               <Text style={styles.bubbleText}>{text}</Text>

@@ -1,4 +1,4 @@
-import React from 'react';
+import { useEffect, useMemo, useState, useCallback } from 'react';
 import { SafeAreaView, View, StyleSheet } from 'react-native';
 import ChatHeader from './components/ChatHeader';
 import ChatMeter from './components/ChatMeter';
@@ -7,39 +7,88 @@ import ChatInput from './components/ChatInput';
 import ChatSystemMessage from './components/ChatSystemMessage';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamsList } from '@/RootStack';
-import useGetRoomUserInfo from '@/hooks/useGetRoomUserInfo';
 import useGetRoom from '@/hooks/useGetRoom';
 import useDisclosure from '@/hooks/useDisclosure';
 import TeamChangeModal from './components/TeamChangeModal';
+import { ChatEventType } from '@/hooks/useWebSocketChat';
+import { useChatWS } from '@/hooks/useChatWS';
 
-const profileImage = require('assets/icon.png');
-export default function RoomPage(props: NativeStackScreenProps<RootStackParamsList, "/room">) {
+export default function RoomPage(
+  props: NativeStackScreenProps<RootStackParamsList, '/room'>
+) {
   const { route } = props;
-
   const { roomId, userId } = route.params;
 
   const { isOpen, handleOpen, handleClose } = useDisclosure();
 
   const { data: roomInfo } = useGetRoom({ id: roomId });
+  const [leftCount, setLeftCount] = useState<number>(roomInfo?.leftCount ?? 0);
+  const [rightCount, setRightCount] = useState<number>(roomInfo?.rightCount ?? 0);
+  const { events: messages, sendMessage } = useChatWS({ userId, roomId });
 
-  const { data: userInfo } = useGetRoomUserInfo({
-    roomId,
-    userId,
-  });
+  useEffect(() => {
+    const last = messages[messages.length - 1];
+    if (!last || last.type !== ChatEventType.ENTER) return;
+
+    const team = String(last.data?.team ?? '').toUpperCase();
+    if (team === 'LEFT') setLeftCount((c) => c + 1);
+    else if (team === 'RIGHT') setRightCount((c) => c + 1);
+  }, [messages]);
+
+  if (!roomInfo) return null;
+
+  const { title, leftTeam, rightTeam, expiredAt } = roomInfo;
+
+  const handleSendMessage = useCallback(
+    (message: string) => {
+      if (!message?.trim()) return;
+      sendMessage(message);
+    },
+    [sendMessage]
+  );
 
   return (
     <SafeAreaView style={styles.safe}>
-      <ChatHeader />
-      <ChatMeter />
+      <ChatHeader title={title} endTime={expiredAt} />
+      <ChatMeter
+        leftTeam={leftTeam}
+        rightTeam={rightTeam}
+        leftCount={leftCount}
+        rightCount={rightCount}
+      />
 
-      <ChatBubble team="left" nickname="닉네임" text="가나다라마" profileImage={profileImage} />
-      <ChatBubble team="right" nickname="닉네임" text="가나다라마" profileImage={profileImage} />
-
-      <ChatSystemMessage text="닉네임1 님이 입장하셨습니다." />
+      {messages.map((msg, index) => {
+        if (msg.type === ChatEventType.MESSAGE) {
+          const { team, nickname, message, profileUrl } = msg.data || {};
+          return (
+            <ChatBubble
+              key={index}
+              team={team}
+              nickname={nickname}
+              text={message}
+              profileImage={profileUrl}
+            />
+          );
+        } else if (msg.type === ChatEventType.ENTER) {
+          const { nickname } = msg.data || {};
+          return (
+            <ChatSystemMessage
+              key={index}
+              text={`${nickname ?? '사용자'} 님이 입장하셨습니다.`}
+            />
+          );
+        }
+        return null;
+      })}
 
       <View style={{ flex: 1 }} />
-      <ChatInput onPlusPress={handleOpen}/>
-      <TeamChangeModal roomId={roomId} userId={userId} isOpen={isOpen} handleClose={handleClose} />
+      <ChatInput onPlusPress={handleOpen} onSend={handleSendMessage} />
+      <TeamChangeModal
+        roomId={roomId}
+        userId={userId}
+        isOpen={isOpen}
+        handleClose={handleClose}
+      />
     </SafeAreaView>
   );
 }

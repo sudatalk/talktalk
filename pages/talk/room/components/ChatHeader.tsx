@@ -1,8 +1,14 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { formatTime } from '@/utils/date';
 
-export default function ChatHeader() {
+type Props = {
+  title: string;
+  endTime: string;
+};
+
+export default function ChatHeader({ title, endTime }: Props) {
   const navigation = useNavigation();
 
   return (
@@ -10,8 +16,8 @@ export default function ChatHeader() {
       <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
         <Text style={styles.backArrow}>‹</Text>
       </TouchableOpacity>
-      <Text style={styles.title}>가나다라마바사가나</Text>
-      <Text style={styles.endTime}>14:55 종료</Text>
+      <Text style={styles.title}>{title}</Text>
+      <Text style={styles.endTime}>{formatTime(endTime)} 종료</Text>
     </View>
   );
 }
