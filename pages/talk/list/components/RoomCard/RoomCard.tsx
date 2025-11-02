@@ -1,10 +1,11 @@
 import { View, Text, StyleSheet } from "react-native";
-import { RoomResponse } from "@/types/room";
+import { RoomResponse, RoomStatus } from "@/types/room";
 import ProgressBar from "./ProgressBar";
 import FooterButton from "./FooterButton";
 export default function RoomCard({ room, onPress }: { room: RoomResponse; onPress: (id: number) => void }) {
+  const isEnded = room.status === RoomStatus.OFF;
   return (
-    <View style={styles.card}>
+    <View style={[styles.card, isEnded && { opacity: 0.5 }]}>
       <Text style={styles.cardTitle} numberOfLines={2}>
         {room.title}
       </Text>
@@ -21,7 +22,7 @@ export default function RoomCard({ room, onPress }: { room: RoomResponse; onPres
           <Text style={styles.teamCount}>{room.rightCount}명</Text>
         </View>
       </View>
-      <FooterButton room={room} onPress={() => onPress(room.id)} />
+      <FooterButton room={room} onPress={() => onPress(room.id)} isEnded={isEnded} />
     </View>
   );
 }

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { SafeAreaView, View, StyleSheet } from 'react-native';
 import ChatHeader from './components/ChatHeader';
 import ChatMeter from './components/ChatMeter';
@@ -12,6 +12,8 @@ import useDisclosure from '@/hooks/useDisclosure';
 import TeamChangeModal from './components/TeamChangeModal';
 import { ChatEventType } from '@/hooks/useWebSocketChat';
 import { useChatWS } from '@/hooks/useChatWS';
+import { useExitOnExpire } from '@/hooks/useExitOnExpire';
+import { useNavigation } from '@react-navigation/native';
 
 export default function RoomPage(
   props: NativeStackScreenProps<RootStackParamsList, '/room'>
@@ -25,6 +27,11 @@ export default function RoomPage(
   const [leftCount, setLeftCount] = useState<number>(roomInfo?.leftCount ?? 0);
   const [rightCount, setRightCount] = useState<number>(roomInfo?.rightCount ?? 0);
   const { events: messages, sendMessage } = useChatWS({ userId, roomId });
+  const navigation = useNavigation();
+
+  useExitOnExpire(roomInfo?.expiredAt, () => {
+    if (navigation.canGoBack()) navigation.goBack();
+  });
 
   useEffect(() => {
     const last = messages[messages.length - 1];
