@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 
 type Props = {
   onPlusPress: () => void;
+  onSend: (text: string) => void;
 };
 
-export default function ChatInput({onPlusPress}: Props) {
+export default function ChatInput({ onPlusPress, onSend }: Props) {
+  const [text, setText] = useState('');
+
   return (
     <View style={styles.inputBar}>
       <TouchableOpacity style={styles.plusBtn} onPress={onPlusPress}>
@@ -17,10 +20,12 @@ export default function ChatInput({onPlusPress}: Props) {
           placeholder="메시지를 입력하세요"
           placeholderTextColor="#8A8A8A"
           style={styles.input}
+          value={text}
+          onChangeText={setText}
         />
       </View>
 
-      <TouchableOpacity style={styles.sendBtn}>
+      <TouchableOpacity style={styles.sendBtn} onPress={() => onSend(text)}>
         <Text style={styles.sendText}>전송</Text>
       </TouchableOpacity>
     </View>

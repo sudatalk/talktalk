@@ -1,35 +1,44 @@
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 
-export default function ChatMeter() {
+type Props = {
+  leftTeam: string;
+  rightTeam: string;
+  leftCount: number;
+  rightCount: number;
+};
+
+export default function ChatMeter({ leftTeam, rightTeam, leftCount, rightCount }: Props) {
   const screenWidth = Dimensions.get('window').width;
   const progressBarWidth = screenWidth * 0.5;
+  const leftProgress = leftCount / (leftCount + rightCount) * 100;
+  const rightProgress = rightCount / (leftCount + rightCount) * 100;
 
   return (
     <View style={styles.container}>
       <View style={styles.topRow}>
         <View style={styles.sideBox}>
-          <Text style={styles.meterLabel}>찍먹찍먹찍먹찍먹</Text>
+          <Text style={styles.meterLabel}>{leftTeam}</Text>
         </View>
 
         <View style={[styles.progressBarWrapper, { width: progressBarWidth }]}>
           <View style={styles.progressBar}>
-            <View style={[styles.barWhite, { width: '55%' }]} />
-            <View style={[styles.barGray, { width: '45%' }]} />
+            <View style={[styles.barWhite, { width: `${leftProgress}%` }]} />
+            <View style={[styles.barGray, { width: `${rightProgress}%` }]} />
           </View>
         </View>
 
         <View style={styles.sideBox}>
-          <Text style={styles.meterLabelRight}>부먹</Text>
+          <Text style={styles.meterLabelRight}>{rightTeam}</Text>
         </View>
       </View>
 
       <View style={styles.bottomRow}>
         <View style={styles.sideBox}>
-          <Text style={styles.meterCount}>5명</Text>
+          <Text style={styles.meterCount}>{leftCount}명</Text>
         </View>
         <View style={{ width: progressBarWidth }} />
         <View style={styles.sideBox}>
-          <Text style={styles.meterCountRight}>5명</Text>
+          <Text style={styles.meterCountRight}>{rightCount}명</Text>
         </View>
       </View>
     </View>

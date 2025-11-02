@@ -1,20 +1,8 @@
 import { RoomResponse, RoomStatus } from "@/types/room";
+import { formatTime } from "@/utils/date";
 import { Pressable, Text, StyleSheet } from "react-native";
 
 import { View } from "react-native";
-
-const convertDate = (date: string) => {
-  const d = new Date(date);
-
-  const years = d.getFullYear();
-  const months = (d.getMonth() + 1).toString().padStart(2, "0");
-  const days = d.getDate().toString().padStart(2, "0");
-
-  const hours = d.getHours().toString().padStart(2, "0");
-  const minutes = d.getMinutes().toString().padStart(2, "0");
-
-  return `${years}년 ${months}월 ${days}일\n${hours}시 ${minutes}분`;
-};
 
 export default function FooterButton({ room, onPress }: { room: RoomResponse; onPress: () => void }) {
   return (
@@ -26,7 +14,7 @@ export default function FooterButton({ room, onPress }: { room: RoomResponse; on
       ) : (
         <Text style={styles.endedText}>종료됨</Text>
       )}
-      {room.expiredAt && <Text style={styles.expiredAtText}>{convertDate(room.expiredAt)}</Text>}
+      {room.expiredAt && <Text style={styles.expiredAtText}>{formatTime(room.expiredAt)}에 종료</Text>}
     </View>
   );
 }
