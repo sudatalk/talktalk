@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
-import { SafeAreaView, View, StyleSheet } from 'react-native';
+import { StyleSheet, Platform, KeyboardAvoidingView, FlatList } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import ChatHeader from './components/ChatHeader';
 import ChatMeter from './components/ChatMeter';
 import ChatBubble from './components/ChatBubble';
@@ -10,7 +11,7 @@ import { RootStackParamsList } from '@/RootStack';
 import useGetRoom from '@/hooks/useGetRoom';
 import useDisclosure from '@/hooks/useDisclosure';
 import TeamChangeModal from './components/TeamChangeModal';
-import { ChatEventType } from '@/hooks/useWebSocketChat';
+import { ChatEventType } from '@/hooks/useChatWS';
 import { useChatWS } from '@/hooks/useChatWS';
 import { useExitOnExpire } from '@/hooks/useExitOnExpire';
 import { useNavigation } from '@react-navigation/native';
@@ -54,49 +55,60 @@ export default function RoomPage(
     [sendMessage]
   );
 
+  const renderItem = ({ item: msg }: { item: any }) => {
+    if (msg.type === ChatEventType.MESSAGE) {
+      const { team, nickname, message, profileUrl } = msg.data || {};
+      return (
+        <ChatBubble
+          team={team}
+          nickname={nickname}
+          text={message}
+          profileImage={profileUrl}
+        />
+      );
+    }
+    if (msg.type === ChatEventType.ENTER) {
+      const { nickname } = msg.data || {};
+      return (
+        <ChatSystemMessage text={`${nickname ?? '사용자'} 님이 입장하셨습니다.`} />
+      );
+    }
+    return null;
+  };
+
   return (
-    <SafeAreaView style={styles.safe}>
-      <ChatHeader title={title} endTime={expiredAt} />
-      <ChatMeter
-        leftTeam={leftTeam}
-        rightTeam={rightTeam}
-        leftCount={leftCount}
-        rightCount={rightCount}
-      />
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 80 : 0}
+    >
+      <SafeAreaView style={styles.safe} edges={['top', 'left', 'right']}>
+        <ChatHeader title={title} endTime={expiredAt} />
+        <ChatMeter
+          leftTeam={leftTeam}
+          rightTeam={rightTeam}
+          leftCount={leftCount}
+          rightCount={rightCount}
+        />
 
-      {messages.map((msg, index) => {
-        if (msg.type === ChatEventType.MESSAGE) {
-          const { team, nickname, message, profileUrl } = msg.data || {};
-          return (
-            <ChatBubble
-              key={index}
-              team={team}
-              nickname={nickname}
-              text={message}
-              profileImage={profileUrl}
-            />
-          );
-        } else if (msg.type === ChatEventType.ENTER) {
-          const { nickname } = msg.data || {};
-          return (
-            <ChatSystemMessage
-              key={index}
-              text={`${nickname ?? '사용자'} 님이 입장하셨습니다.`}
-            />
-          );
-        }
-        return null;
-      })}
-
-      <View style={{ flex: 1 }} />
-      <ChatInput onPlusPress={handleOpen} onSend={handleSendMessage} />
-      <TeamChangeModal
-        roomId={roomId}
-        userId={userId}
-        isOpen={isOpen}
-        handleClose={handleClose}
-      />
-    </SafeAreaView>
+        <FlatList
+          data={messages}
+          keyExtractor={(_, i) => String(i)}
+          renderItem={renderItem}
+          style={{ flex: 1 }}                          // ★ 본문이 리사이즈될 대상
+          contentContainerStyle={{ padding: 16 }}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        />
+        <ChatInput onPlusPress={handleOpen} onSend={handleSendMessage} />
+        <TeamChangeModal
+            roomId={roomId}
+            userId={userId}
+            isOpen={isOpen}
+            handleClose={handleClose}
+          />
+      </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 }
 
