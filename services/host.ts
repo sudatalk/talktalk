@@ -1,3 +1,3 @@
-import { Platform } from "react-native";
+export const API_HOST = "https://talkx2.shop:4776";
 
-export const API_HOST = Platform.OS === "android" ? "http://10.0.2.2:8000" : "http://localhost:8000";
+export const WS_HOST = "wss://talkx2.shop:4776";

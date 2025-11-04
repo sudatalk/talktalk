@@ -1,8 +1,10 @@
 import Text from "@/components/Text";
 import { useController } from "react-hook-form";
-import { ActivityIndicator, Image, Pressable, StyleSheet, View } from "react-native";
+import { ActivityIndicator, Image, ImageSourcePropType, Pressable, StyleSheet, View } from "react-native";
 import { JOIN_TALK_FORM_PATH } from "../../constants/joinTalkForm";
 import useRandomImage from "../../hooks/useRandomImage";
+
+type ImageSource = string | number; // URL(string) or require(number)
 
 const JoinTalkModalProfileImage = () => {
   const {
@@ -17,6 +19,9 @@ const JoinTalkModalProfileImage = () => {
   const { data, isFetching } = useRandomImage();
 
   const imageList = data?.filter(Boolean);
+
+  const toSource = (v: ImageSource): ImageSourcePropType =>
+    typeof v === "string" ? { uri: v } : v;
 
   const handleClick = (value: string) => {
     onChange(value);
@@ -34,13 +39,10 @@ const JoinTalkModalProfileImage = () => {
           <>
             {imageList?.map((url, index) => {
               const isSelected = value === url;
-
               return (
                 <Pressable onPress={() => handleClick(url)} key={index}>
                   <Image
-                    source={{
-                      uri: url,
-                    }}
+                    source={toSource(url)}
                     style={{ ...styles.image, ...(isSelected && styles.selected) }}
                   />
                 </Pressable>
