@@ -12,11 +12,11 @@ type Props = {
   roomId: number;
   userId: string;
   handleClose: () => void;
-  onChange?: () => void;
+  handleTeamChange: (team: Team) => void;
 };
 
 const TeamChangeModalContent = (props: Props) => {
-  const { roomId, userId, handleClose, onChange } = props;
+  const { roomId, userId, handleClose, handleTeamChange } = props;
 
   const [selectedTeam, setSelectedTeam] = useState<Team>();
 
@@ -51,7 +51,7 @@ const TeamChangeModalContent = (props: Props) => {
       });
 
       await refetch();
-      onChange?.();
+      handleTeamChange(selectedTeam);
     }
 
     handleClose();

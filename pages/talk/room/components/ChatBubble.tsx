@@ -9,7 +9,7 @@ type ChatBubbleProps = {
 };
 
 export default function ChatBubble({ team, nickname, text, profileImage }: ChatBubbleProps) {
-  const isLeft = team === 'left';
+  const isLeft = team?.toLowerCase() === 'left';
 
   return (
     <View style={[styles.container, isLeft ? styles.leftAlign : styles.rightAlign]}>

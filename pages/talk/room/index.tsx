@@ -15,6 +15,7 @@ import { ChatEventType } from '@/hooks/useChatWS';
 import { useChatWS } from '@/hooks/useChatWS';
 import { useExitOnExpire } from '@/hooks/useExitOnExpire';
 import { useNavigation } from '@react-navigation/native';
+import { Team } from '@/types/chat';
 
 export default function RoomPage(
   props: NativeStackScreenProps<RootStackParamsList, '/room'>
@@ -27,7 +28,7 @@ export default function RoomPage(
   const { data: roomInfo } = useGetRoom({ id: roomId });
   const [leftCount, setLeftCount] = useState<number>(roomInfo?.leftCount ?? 0);
   const [rightCount, setRightCount] = useState<number>(roomInfo?.rightCount ?? 0);
-  const { events: messages, sendMessage } = useChatWS({ userId, roomId });
+  const { events: messages, sendMessage, sendRoomChange } = useChatWS({ userId, roomId });
   const navigation = useNavigation();
 
   useExitOnExpire(roomInfo?.expiredAt, () => {
@@ -35,12 +36,13 @@ export default function RoomPage(
   });
 
   useEffect(() => {
-    const last = messages[messages.length - 1];
-    if (!last || last.type !== ChatEventType.ENTER) return;
-
-    const team = String(last.data?.team ?? '').toUpperCase();
-    if (team === 'LEFT') setLeftCount((c) => c + 1);
-    else if (team === 'RIGHT') setRightCount((c) => c + 1);
+    if (messages.length > 0) {
+      const last = messages[messages.length - 1];
+      if (last.type === ChatEventType.ROOM) {
+        setLeftCount(last.data?.leftCount ?? 0);
+        setRightCount(last.data?.rightCount ?? 0);
+      }
+    }
   }, [messages]);
 
   if (!roomInfo) return null;
@@ -54,6 +56,10 @@ export default function RoomPage(
     },
     [sendMessage]
   );
+
+  const handleTeamChange = useCallback((team: Team) => {
+    sendRoomChange(team);
+  }, [sendRoomChange]);
 
   const renderItem = ({ item: msg }: { item: any }) => {
     if (msg.type === ChatEventType.MESSAGE) {
@@ -106,6 +112,7 @@ export default function RoomPage(
             userId={userId}
             isOpen={isOpen}
             handleClose={handleClose}
+            handleTeamChange={handleTeamChange}
           />
       </SafeAreaView>
     </KeyboardAvoidingView>
