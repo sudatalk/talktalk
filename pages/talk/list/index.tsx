@@ -15,7 +15,7 @@ import { RootStackNavigationProp } from "@/RootStack";
 import { useNavigation } from "@react-navigation/native";
 
 export default function RoomListPage() {
-  const { roomList, fetchNextPage, hasNextPage, isFetchingNextPage } = useGetRoomList({});
+  const { roomList, fetchNextPage, hasNextPage, isFetchingNextPage } = useGetRoomList({options: {refetchOnMount: true}});
 
   const userId = useDeviceId();
 
