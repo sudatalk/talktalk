@@ -13,7 +13,7 @@ import { getErrorData } from "@/utils/error";
 import { NOT_FOUND_ROOM_USER_INFO_CODE } from "./constants/error";
 import { RootStackNavigationProp } from "@/RootStack";
 import { useNavigation } from "@react-navigation/native";
-
+import Footer from "./components/Footer";
 export default function RoomListPage() {
   const { roomList, fetchNextPage, hasNextPage, isFetchingNextPage } = useGetRoomList({options: {refetchOnMount: true}});
 
@@ -60,6 +60,7 @@ export default function RoomListPage() {
         </Pressable>
       </View>
       <RoomList data={roomList} handleClickJoinButton={handleClickJoinButton} handleEndReached={handleEndReached} isLoading={isFetchingNextPage} />
+      <Footer />
       <CreateTalkModal isOpen={isOpenCreateTalkModal} handleClose={handleCloseCreateTalkModal} />
       <JoinTalkModal roomId={roomId} userId={userId} isOpen={isOpenJoinTalkModal} handleClose={handleCloseJoinTalkModal} />
     </>
