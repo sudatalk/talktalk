@@ -1,6 +1,7 @@
 import { ActivityIndicator, Dimensions, StatusBar } from "react-native";
 import { StatusBar as ExpoStatusBar } from "expo-status-bar";
-import { SafeAreaView, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Toast from "./components/Toast";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
