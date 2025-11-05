@@ -11,7 +11,7 @@ export enum ChatEventType {
 
 type Params = { userId: string; roomId: number };
 
-const RECONNECT_DELAY = 5000;
+const RECONNECT_DELAY = 3000;
 const QUEUE_LIMIT = 200;
 
 export function useChatWS({ userId, roomId }: Params) {
