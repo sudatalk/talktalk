@@ -2,8 +2,8 @@ import { RoomResponse } from "@/types/room";
 import { View, StyleSheet } from "react-native";
 
 export default function ProgressBar({ room }: { room: RoomResponse }) {
-  const leftRatio = room.leftCount / (room.leftCount + room.rightCount);
-  const rightRatio = room.rightCount / (room.leftCount + room.rightCount);
+  const leftRatio = (room.leftCount / (room.leftCount + room.rightCount)) * 2;
+  const rightRatio = (room.rightCount / (room.leftCount + room.rightCount)) * 2;
 
   return (
     <View style={styles.barWrapper}>
