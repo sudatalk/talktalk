@@ -34,15 +34,22 @@ const styles = StyleSheet.create({
 
     alignItems: "center",
     justifyContent: "center",
-
-    gap: 8,
   },
 
   textInput: {
+    width: "90%",
+    flex: 0.4,
+
     color: "#FFFFFF",
     fontSize: 16,
     fontWeight: 700,
 
     paddingBottom: 0, // 안드로이드 기본 패딩 제거
+
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+
+    textAlign: "center",
   },
 });

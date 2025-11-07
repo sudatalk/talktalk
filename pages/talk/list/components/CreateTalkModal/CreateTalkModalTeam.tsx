@@ -34,7 +34,7 @@ const CreateTalkModalTeam = () => {
     <View style={styles.container}>
       <View style={styles.teamContainer}>
         <View style={styles.teamWrapper}>
-          <ModalTextInput value={leftTeamValue} onChangeText={onChangeLeftTeam} placeholder="왼쪽 팀명" placeholderTextColor="#808080" maxLength={MAX_LENGTH} />
+          <ModalTextInput value={leftTeamValue} onChangeText={onChangeLeftTeam} placeholder="왼쪽 팀명" placeholderTextColor="#808080" maxLength={MAX_LENGTH} style={styles.input} />
         </View>
       </View>
       <View style={styles.vsContainer}>
@@ -44,7 +44,7 @@ const CreateTalkModalTeam = () => {
       </View>
       <View style={styles.teamContainer}>
         <View style={styles.teamWrapper}>
-          <ModalTextInput value={rightTeamValue} onChangeText={onChangeRightTeam} placeholder="오른쪽 팀명" placeholderTextColor="#808080" maxLength={MAX_LENGTH} />
+          <ModalTextInput value={rightTeamValue} onChangeText={onChangeRightTeam} placeholder="오른쪽 팀명" placeholderTextColor="#808080" maxLength={MAX_LENGTH} style={styles.input} />
         </View>
       </View>
     </View>
@@ -79,6 +79,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
 
     borderRadius: 5,
+
+    flexDirection: "row",
   },
 
   vsContainer: {
@@ -86,5 +88,15 @@ const styles = StyleSheet.create({
 
     alignItems: "center",
     justifyContent: "center",
+  },
+
+  input: {
+    flex: 1,
+    height: "100%",
+
+    alignItems: "center",
+    justifyContent: "center",
+
+    textAlign: "center",
   },
 });
