@@ -1,7 +1,7 @@
-import { ActivityIndicator, Dimensions, StatusBar } from "react-native";
+import { ActivityIndicator, StatusBar } from "react-native";
 import { StatusBar as ExpoStatusBar } from "expo-status-bar";
 import { StyleSheet } from "react-native";
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Toast from "./components/Toast";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -10,10 +10,7 @@ import { DarkTheme, NavigationContainer } from "@react-navigation/native";
 import RootStack from "./RootStack";
 import { useDeviceId } from "./hooks/useDeviceId";
 
-const SCREEN_HEIGHT = Dimensions.get("screen").height; // device height
 const STATUS_BAR_HEIGHT = StatusBar.currentHeight || 24;
-const WINDOW_HEIGHT = Dimensions.get("window").height;
-const BOTTOM_NAVIGATION_BAR_HEIGHT = SCREEN_HEIGHT - WINDOW_HEIGHT;
 
 const queryClient = new QueryClient();
 
@@ -44,6 +41,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#000",
     paddingTop: STATUS_BAR_HEIGHT,
-    paddingBottom: BOTTOM_NAVIGATION_BAR_HEIGHT,
+    paddingBottom: 0,
   },
 });
