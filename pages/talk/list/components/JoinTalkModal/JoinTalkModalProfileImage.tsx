@@ -18,7 +18,7 @@ const JoinTalkModalProfileImage = () => {
 
   const { data, isFetching } = useRandomImage();
 
-  const imageList = data?.filter(Boolean).filter((item, index, self) => index === self.findIndex((t) => t.url === item.url));
+  const imageList = data?.filter(Boolean).filter((item, index, self) => index !== self.findIndex((t) => t.url === item.url));
 
   const toSource = (v: ImageSource): ImageSourcePropType => (typeof v === "string" ? { uri: v } : v);
 
