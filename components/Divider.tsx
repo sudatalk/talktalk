@@ -16,7 +16,11 @@ const Divider = (props: Props) => {
     }
   });
 
-  return <View style={style}></View>;
+  return (
+    <View style={{ flexDirection: "row" }}>
+      <View style={style}></View>
+    </View>
+  );
 };
 
 export default Divider;
@@ -28,7 +32,7 @@ const styles = StyleSheet.create({
   },
 
   type1: {
-    width: 340,
+    flex: 0.9,
   },
   type2: {
     width: 170,

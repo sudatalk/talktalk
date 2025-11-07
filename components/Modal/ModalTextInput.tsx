@@ -13,7 +13,7 @@ const ModalTextInput = (props: TextInputProps) => {
     }
   });
 
-  return <BottomSheetTextInput {...props} style={style} />;
+  return <BottomSheetTextInput style={style} {...props} />;
 };
 
 export default ModalTextInput;
