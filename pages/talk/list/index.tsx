@@ -15,7 +15,7 @@ import { RootStackNavigationProp } from "@/RootStack";
 import { useNavigation } from "@react-navigation/native";
 import Footer from "./components/Footer";
 export default function RoomListPage() {
-  const { roomList, fetchNextPage, hasNextPage, isFetchingNextPage } = useGetRoomList({options: {refetchOnMount: true}});
+  const { roomList, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } = useGetRoomList({ options: { refetchOnMount: true } });
 
   const userId = useDeviceId();
 
@@ -59,7 +59,7 @@ export default function RoomListPage() {
           <Text style={styles.createButtonText}>방 만들기</Text>
         </Pressable>
       </View>
-      <RoomList data={roomList} handleClickJoinButton={handleClickJoinButton} handleEndReached={handleEndReached} isLoading={isFetchingNextPage} />
+      <RoomList data={roomList} handleClickJoinButton={handleClickJoinButton} handleEndReached={handleEndReached} isLoading={isFetchingNextPage} refetch={refetch} />
       <Footer />
       <CreateTalkModal isOpen={isOpenCreateTalkModal} handleClose={handleCloseCreateTalkModal} />
       <JoinTalkModal roomId={roomId} userId={userId} isOpen={isOpenJoinTalkModal} handleClose={handleCloseJoinTalkModal} />
