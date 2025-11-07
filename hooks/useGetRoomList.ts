@@ -36,7 +36,13 @@ const useGetRoomList = (props: Props = {}) => {
     }, [])
   );
 
-  return { ...result, roomList: result.data?.pages.flatMap((value) => value.data) };
+  return {
+    ...result,
+    roomList: result.data?.pages.flatMap((value) => value.data),
+    refetch: () => {
+      result.refetch();
+    },
+  };
 };
 
 export default useGetRoomList;
