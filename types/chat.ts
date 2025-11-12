@@ -26,3 +26,16 @@ export type GetChatUserParams = {
   roomId: number;
   userId: string;
 };
+
+export type GetChatLogsParams = {
+  chatId: number;
+  page?: number;
+  size?: number;
+};
+
+export type GetChatLogsResponse = {
+  chatId: number;
+  message: string;
+  team: Team;
+  userId: string;
+}[];

@@ -1,4 +1,4 @@
-import { ChatResponse, GetChatUserParams, PostChatJoinParams, PutChatUserParams } from "@/types/chat";
+import { ChatResponse, GetChatLogsParams, GetChatLogsResponse, GetChatUserParams, PostChatJoinParams, PutChatUserParams } from "@/types/chat";
 import { API_HOST } from "./host";
 import { api } from "@/utils/api";
 
@@ -12,4 +12,8 @@ export function getChatUser(params: GetChatUserParams): Promise<ChatResponse> {
 
 export function putChatUser(params: PutChatUserParams): Promise<ChatResponse> {
   return api.put(`${API_HOST}/chat/user`, params);
+}
+
+export function getChatLogs(params: GetChatLogsParams): Promise<GetChatLogsResponse> {
+  return api.get(`${API_HOST}/chat/logs/${params.chatId}`, { params });
 }

@@ -1,5 +1,5 @@
-import { useEffect, useState, useCallback } from 'react';
-import { StyleSheet, Platform, KeyboardAvoidingView, FlatList } from 'react-native';
+import { useEffect, useState, useCallback, useRef, useMemo } from 'react';
+import { StyleSheet, Platform, KeyboardAvoidingView, FlatList, ActivityIndicator, View, NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ChatHeader from './components/ChatHeader';
 import ChatMeter from './components/ChatMeter';
@@ -16,6 +16,7 @@ import { useChatWS } from '@/hooks/useChatWS';
 import { useExitOnExpire } from '@/hooks/useExitOnExpire';
 import { useNavigation } from '@react-navigation/native';
 import { Team } from '@/types/chat';
+import useGetChatLogs from '@/hooks/useGetChatLogs';
 
 export default function RoomPage(
   props: NativeStackScreenProps<RootStackParamsList, '/room'>
@@ -30,7 +31,8 @@ export default function RoomPage(
   const [rightCount, setRightCount] = useState<number>(roomInfo?.rightCount ?? 0);
   const { events: messages, sendMessage, sendRoomChange } = useChatWS({ userId, roomId });
   const navigation = useNavigation();
-
+  // 과거 채팅 로그 조회
+  const { logs, fetchNextPage, hasNextPage, isFetchingNextPage } = useGetChatLogs({ chatId: roomId });
   useExitOnExpire(roomInfo?.expiredAt, () => {
     if (navigation.canGoBack()) navigation.goBack();
   });
@@ -39,6 +41,7 @@ export default function RoomPage(
     if (messages.length > 0) {
       const last = messages[messages.length - 1];
       if (last.type === ChatEventType.ROOM) {
+        console.log('room', last);
         setLeftCount(last.data?.leftCount ?? 0);
         setRightCount(last.data?.rightCount ?? 0);
       }
@@ -48,6 +51,56 @@ export default function RoomPage(
   if (!roomInfo) return null;
 
   const { title, leftTeam, rightTeam, expiredAt } = roomInfo;
+
+  const mergedMessages = useMemo(() => [...logs, ...messages], [logs, messages]);
+  const listRef = useRef<FlatList<any>>(null);
+  const prevContentHeightRef = useRef(0);
+  const [isPrepending, setIsPrepending] = useState(false);
+  const TOP_THRESHOLD = 60; // px
+
+  // 위로 스크롤 시 과거 페이지 더 가져오기
+  const handleScroll = useCallback(
+    (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+      const y = e.nativeEvent.contentOffset.y;
+      if (y <= TOP_THRESHOLD && hasNextPage && !isFetchingNextPage) {
+        setIsPrepending(true);
+        fetchNextPage();
+      }
+    },
+    [hasNextPage, isFetchingNextPage, fetchNextPage]
+  );
+
+  const handleContentSizeChange = useCallback(
+    (h: number) => {
+      if (isPrepending) {
+        const prev = prevContentHeightRef.current || 0;
+        const delta = h - prev;
+        listRef.current?.scrollToOffset({
+          offset: delta,
+          animated: false,
+        });
+        setIsPrepending(false);
+      }
+      prevContentHeightRef.current = h;
+    },
+    [isPrepending]
+  );
+
+  // 새 라이브 메시지 도착 시 “아래에 있을 때만” 자동 스크롤 (사용자 과거 읽는 중이면 방해 X)
+  const [isAtBottom, setIsAtBottom] = useState(true);
+  const handleMomentumScrollEnd = useCallback((e: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const { y } = e.nativeEvent.contentOffset;
+    const { height: layoutH } = e.nativeEvent.layoutMeasurement;
+    const { height: contentH } = e.nativeEvent.contentSize;
+    const nearBottom = y + layoutH >= contentH - 20;
+    setIsAtBottom(nearBottom);
+  }, []);
+  // messages가 갱신될 때 최신이 보이도록
+  useEffect(() => {
+    if (isAtBottom) {
+      requestAnimationFrame(() => listRef.current?.scrollToEnd({ animated: true }));
+    }
+  }, [mergedMessages.length, isAtBottom]);
 
   const handleSendMessage = useCallback(
     (message: string) => {
@@ -62,6 +115,12 @@ export default function RoomPage(
   }, [sendRoomChange]);
 
   const renderItem = ({ item: msg }: { item: any }) => {
+    if (msg.message) {
+      const { message, team, nickname, profileUrl } = msg;
+      return (
+        <ChatBubble team={team} nickname={nickname} text={message} profileImage={profileUrl} />
+      );
+    }
     if (msg.type === ChatEventType.MESSAGE) {
       const { team, nickname, message, profileUrl } = msg.data || {};
       return (
@@ -96,16 +155,26 @@ export default function RoomPage(
           leftCount={leftCount}
           rightCount={rightCount}
         />
-
         <FlatList
-          data={messages}
+          ref={listRef}
+          data={mergedMessages}
           keyExtractor={(_, i) => String(i)}
           renderItem={renderItem}
-          style={{ flex: 1 }}                          // ★ 본문이 리사이즈될 대상
+          onScroll={handleScroll}
+          onMomentumScrollEnd={handleMomentumScrollEnd}
+          scrollEventThrottle={16}
+          onContentSizeChange={handleContentSizeChange}
+          ListHeaderComponent={
+            isFetchingNextPage
+              ? <View style={{ paddingVertical: 8 }}><ActivityIndicator /></View>
+              : null
+          }
+          onLayout={() => requestAnimationFrame(() => listRef.current?.scrollToEnd({ animated: false }))}
+          style={{ flex: 1 }}
           contentContainerStyle={{ padding: 16 }}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
-        />
+      />
         <ChatInput onPlusPress={handleOpen} onSend={handleSendMessage} />
         <TeamChangeModal
             roomId={roomId}
