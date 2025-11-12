@@ -87,7 +87,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 10,
+    paddingVertical: 10,
     backgroundColor: "#1a1a1a",
+    marginBottom: 10,
+    marginTop: 10,
   },
 
   plusBtn: {

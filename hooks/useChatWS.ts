@@ -57,7 +57,7 @@ export function useChatWS({ userId, roomId }: Params) {
       try {
         const data = JSON.parse(msg.data);
         if (data.type === ChatEventType.MESSAGE || data.type === ChatEventType.ROOM || data.type === ChatEventType.ENTER) {
-          setEvents((prev) => [...prev, data]);
+          setEvents((prev) => [data, ...prev]);
         }
       } catch (err) {
         console.warn("WebSocket parse error", err);
