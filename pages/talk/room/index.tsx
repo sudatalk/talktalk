@@ -41,7 +41,6 @@ export default function RoomPage(
     if (messages.length > 0) {
       const last = messages[messages.length - 1];
       if (last.type === ChatEventType.ROOM) {
-        console.log('room', last);
         setLeftCount(last.data?.leftCount ?? 0);
         setRightCount(last.data?.rightCount ?? 0);
       }
@@ -52,55 +51,8 @@ export default function RoomPage(
 
   const { title, leftTeam, rightTeam, expiredAt } = roomInfo;
 
-  const mergedMessages = useMemo(() => [...logs, ...messages], [logs, messages]);
+  const mergedMessages = useMemo(() => [ ...messages, ...logs], [logs, messages]);
   const listRef = useRef<FlatList<any>>(null);
-  const prevContentHeightRef = useRef(0);
-  const [isPrepending, setIsPrepending] = useState(false);
-  const TOP_THRESHOLD = 60; // px
-
-  // 위로 스크롤 시 과거 페이지 더 가져오기
-  const handleScroll = useCallback(
-    (e: NativeSyntheticEvent<NativeScrollEvent>) => {
-      const y = e.nativeEvent.contentOffset.y;
-      if (y <= TOP_THRESHOLD && hasNextPage && !isFetchingNextPage) {
-        setIsPrepending(true);
-        fetchNextPage();
-      }
-    },
-    [hasNextPage, isFetchingNextPage, fetchNextPage]
-  );
-
-  const handleContentSizeChange = useCallback(
-    (h: number) => {
-      if (isPrepending) {
-        const prev = prevContentHeightRef.current || 0;
-        const delta = h - prev;
-        listRef.current?.scrollToOffset({
-          offset: delta,
-          animated: false,
-        });
-        setIsPrepending(false);
-      }
-      prevContentHeightRef.current = h;
-    },
-    [isPrepending]
-  );
-
-  // 새 라이브 메시지 도착 시 “아래에 있을 때만” 자동 스크롤 (사용자 과거 읽는 중이면 방해 X)
-  const [isAtBottom, setIsAtBottom] = useState(true);
-  const handleMomentumScrollEnd = useCallback((e: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const { y } = e.nativeEvent.contentOffset;
-    const { height: layoutH } = e.nativeEvent.layoutMeasurement;
-    const { height: contentH } = e.nativeEvent.contentSize;
-    const nearBottom = y + layoutH >= contentH - 20;
-    setIsAtBottom(nearBottom);
-  }, []);
-  // messages가 갱신될 때 최신이 보이도록
-  useEffect(() => {
-    if (isAtBottom) {
-      requestAnimationFrame(() => listRef.current?.scrollToEnd({ animated: true }));
-    }
-  }, [mergedMessages.length, isAtBottom]);
 
   const handleSendMessage = useCallback(
     (message: string) => {
@@ -158,22 +110,24 @@ export default function RoomPage(
         <FlatList
           ref={listRef}
           data={mergedMessages}
+          inverted
           keyExtractor={(_, i) => String(i)}
           renderItem={renderItem}
-          onScroll={handleScroll}
-          onMomentumScrollEnd={handleMomentumScrollEnd}
-          scrollEventThrottle={16}
-          onContentSizeChange={handleContentSizeChange}
           ListHeaderComponent={
             isFetchingNextPage
               ? <View style={{ paddingVertical: 8 }}><ActivityIndicator /></View>
               : null
           }
-          onLayout={() => requestAnimationFrame(() => listRef.current?.scrollToEnd({ animated: false }))}
           style={{ flex: 1 }}
           contentContainerStyle={{ padding: 16 }}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
+          onEndReached={
+            hasNextPage && !isFetchingNextPage
+              ? () => fetchNextPage()
+              : undefined
+          }
+          onEndReachedThreshold={0.5}
       />
         <ChatInput onPlusPress={handleOpen} onSend={handleSendMessage} />
         <TeamChangeModal

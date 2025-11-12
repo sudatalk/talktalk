@@ -23,7 +23,7 @@ const useGetChatLogs = (props: Props) => {
     },
     initialPageParam: 0,
   });
-  const logs = data?.pages.slice().reverse().flatMap((page) => page) ?? [];
+  const logs = data?.pages.flatMap((page) => page) ?? [];
   return { logs, fetchNextPage, hasNextPage, isFetchingNextPage };
 };
 

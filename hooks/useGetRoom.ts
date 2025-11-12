@@ -17,6 +17,7 @@ const useGetRoom = (props: Props) => {
   const result = useQuery({
     queryKey: getRoomDetailQueryKey(props),
     queryFn: getRoomDetailQueryFn(props),
+    refetchOnWindowFocus: true,
     ...props.options,
   });
 
