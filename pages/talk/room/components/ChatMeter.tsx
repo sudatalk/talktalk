@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Dimensions } from "react-native";
 
 type Props = {
   leftTeam: string;
@@ -8,10 +8,14 @@ type Props = {
 };
 
 export default function ChatMeter({ leftTeam, rightTeam, leftCount, rightCount }: Props) {
-  const screenWidth = Dimensions.get('window').width;
+  const screenWidth = Dimensions.get("window").width;
   const progressBarWidth = screenWidth * 0.5;
-  const leftProgress = leftCount / (leftCount + rightCount) * 100;
-  const rightProgress = rightCount / (leftCount + rightCount) * 100;
+
+  const leftRatio = (leftCount / (leftCount + rightCount)) * 2;
+  const rightRatio = (rightCount / (leftCount + rightCount)) * 2;
+
+  console.log("leftRatio : ", leftRatio);
+  console.log("rightRatio : ", rightRatio);
 
   return (
     <View style={styles.container}>
@@ -21,9 +25,11 @@ export default function ChatMeter({ leftTeam, rightTeam, leftCount, rightCount }
         </View>
 
         <View style={[styles.progressBarWrapper, { width: progressBarWidth }]}>
-          <View style={styles.progressBar}>
-            <View style={[styles.barWhite, { width: `${leftProgress}%` }]} />
-            <View style={[styles.barGray, { width: `${rightProgress}%` }]} />
+          <View style={{ ...styles.barBg, justifyContent: "flex-end" }}>
+            <View style={[styles.barWhite, { flex: leftRatio }]} />
+          </View>
+          <View style={{ ...styles.barBg, justifyContent: "flex-start" }}>
+            <View style={[styles.barGray, { flex: rightRatio }]} />
           </View>
         </View>
 
@@ -48,70 +54,89 @@ export default function ChatMeter({ leftTeam, rightTeam, leftCount, rightCount }
 const styles = StyleSheet.create({
   container: {
     marginTop: 12,
-    width: '100%',
-    alignItems: 'center',
+    width: "100%",
+    alignItems: "center",
+  },
+
+  barBg: {
+    flex: 0.5,
+    height: "100%",
+    borderRadius: 8,
+
+    flexDirection: "row",
   },
 
   topRow: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
   },
 
   sideBox: {
-    width: '25%',
-    alignItems: 'center',
+    width: "25%",
+    alignItems: "center",
   },
 
   meterLabel: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 12,
-    fontWeight: '800',
-    textAlign: 'center',
+    fontWeight: "800",
+    textAlign: "center",
   },
   meterLabelRight: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 12,
-    fontWeight: '800',
-    textAlign: 'center',
+    fontWeight: "800",
+    textAlign: "center",
   },
 
   progressBarWrapper: {
-    alignItems: 'center',
+    flex: 1,
+    height: 12,
+    borderRadius: 8,
+    overflow: "hidden",
+    position: "relative",
+
+    justifyContent: "center",
+    alignItems: "center",
+
+    flexDirection: "row",
+
+    backgroundColor: "#1a1a1a",
   },
   progressBar: {
     height: 10,
-    backgroundColor: '#1A1A1A',
+    backgroundColor: "#1A1A1A",
     borderRadius: 8,
-    overflow: 'hidden',
-    flexDirection: 'row',
-    width: '100%',
+    overflow: "hidden",
+    flexDirection: "row",
+    width: "100%",
   },
   barWhite: {
-    height: '100%',
-    backgroundColor: '#FFF',
+    height: "100%",
+    backgroundColor: "#FFF",
   },
   barGray: {
-    height: '100%',
-    backgroundColor: '#808080',
+    height: "100%",
+    backgroundColor: "#808080",
   },
 
   bottomRow: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
     marginTop: 6,
   },
   meterCount: {
-    color: '#9A9A9A',
+    color: "#9A9A9A",
     fontSize: 12,
-    textAlign: 'center',
+    textAlign: "center",
   },
   meterCountRight: {
-    color: '#9A9A9A',
+    color: "#9A9A9A",
     fontSize: 12,
-    textAlign: 'center',
+    textAlign: "center",
   },
 });
