@@ -1,26 +1,24 @@
-import { useEffect, useState, useCallback, useRef, useMemo } from 'react';
-import { StyleSheet, Platform, KeyboardAvoidingView, FlatList, ActivityIndicator, View, NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import ChatHeader from './components/ChatHeader';
-import ChatMeter from './components/ChatMeter';
-import ChatBubble from './components/ChatBubble';
-import ChatInput from './components/ChatInput';
-import ChatSystemMessage from './components/ChatSystemMessage';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootStackParamsList } from '@/RootStack';
-import useGetRoom from '@/hooks/useGetRoom';
-import useDisclosure from '@/hooks/useDisclosure';
-import TeamChangeModal from './components/TeamChangeModal';
-import { ChatEventType } from '@/hooks/useChatWS';
-import { useChatWS } from '@/hooks/useChatWS';
-import { useExitOnExpire } from '@/hooks/useExitOnExpire';
-import { useNavigation } from '@react-navigation/native';
-import { Team } from '@/types/chat';
-import useGetChatLogs from '@/hooks/useGetChatLogs';
+import { useEffect, useState, useCallback, useRef, useMemo } from "react";
+import { StyleSheet, Platform, KeyboardAvoidingView, FlatList, ActivityIndicator, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import ChatHeader from "./components/ChatHeader";
+import ChatMeter from "./components/ChatMeter";
+import ChatBubble from "./components/ChatBubble";
+import ChatInput from "./components/ChatInput";
+import ChatSystemMessage from "./components/ChatSystemMessage";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { RootStackParamsList } from "@/RootStack";
+import useGetRoom from "@/hooks/useGetRoom";
+import useDisclosure from "@/hooks/useDisclosure";
+import TeamChangeModal from "./components/TeamChangeModal";
+import { ChatEventType } from "@/hooks/useChatWS";
+import { useChatWS } from "@/hooks/useChatWS";
+import { useExitOnExpire } from "@/hooks/useExitOnExpire";
+import { useNavigation } from "@react-navigation/native";
+import { Team } from "@/types/chat";
+import useGetChatLogs from "@/hooks/useGetChatLogs";
 
-export default function RoomPage(
-  props: NativeStackScreenProps<RootStackParamsList, '/room'>
-) {
+export default function RoomPage(props: NativeStackScreenProps<RootStackParamsList, "/room">) {
   const { route } = props;
   const { roomId, userId } = route.params;
 
@@ -39,10 +37,11 @@ export default function RoomPage(
 
   useEffect(() => {
     if (messages.length > 0) {
-      const last = messages[messages.length - 1];
-      if (last.type === ChatEventType.ROOM) {
-        setLeftCount(last.data?.leftCount ?? 0);
-        setRightCount(last.data?.rightCount ?? 0);
+      const first = messages[0];
+
+      if (first.type === ChatEventType.ROOM) {
+        setLeftCount(first.data?.leftCount ?? 0);
+        setRightCount(first.data?.rightCount ?? 0);
       }
     }
   }, [messages]);
@@ -51,7 +50,7 @@ export default function RoomPage(
 
   const { title, leftTeam, rightTeam, expiredAt } = roomInfo;
 
-  const mergedMessages = useMemo(() => [ ...messages, ...logs], [logs, messages]);
+  const mergedMessages = useMemo(() => [...messages, ...logs], [logs, messages]);
   const listRef = useRef<FlatList<any>>(null);
 
   const handleSendMessage = useCallback(
@@ -62,51 +61,34 @@ export default function RoomPage(
     [sendMessage]
   );
 
-  const handleTeamChange = useCallback((team: Team) => {
-    sendRoomChange(team);
-  }, [sendRoomChange]);
+  const handleTeamChange = useCallback(
+    (team: Team) => {
+      sendRoomChange(team);
+    },
+    [sendRoomChange]
+  );
 
   const renderItem = ({ item: msg }: { item: any }) => {
     if (msg.message) {
       const { message, team, nickname, profileUrl } = msg;
-      return (
-        <ChatBubble team={team} nickname={nickname} text={message} profileImage={profileUrl} />
-      );
+      return <ChatBubble team={team} nickname={nickname} text={message} profileImage={profileUrl} />;
     }
     if (msg.type === ChatEventType.MESSAGE) {
       const { team, nickname, message, profileUrl } = msg.data || {};
-      return (
-        <ChatBubble
-          team={team}
-          nickname={nickname}
-          text={message}
-          profileImage={profileUrl}
-        />
-      );
+      return <ChatBubble team={team} nickname={nickname} text={message} profileImage={profileUrl} />;
     }
     if (msg.type === ChatEventType.ENTER) {
       const { nickname } = msg.data || {};
-      return (
-        <ChatSystemMessage text={`${nickname ?? '사용자'} 님이 입장하셨습니다.`} />
-      );
+      return <ChatSystemMessage text={`${nickname ?? "사용자"} 님이 입장하셨습니다.`} />;
     }
     return null;
   };
 
   return (
-    <KeyboardAvoidingView
-      style={{ flex: 1 }}
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
-      keyboardVerticalOffset={Platform.OS === "ios" ? 80 : 0}
-    >
-      <SafeAreaView style={styles.safe} edges={['top', 'left', 'right']}>
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : undefined} keyboardVerticalOffset={Platform.OS === "ios" ? 80 : 0}>
+      <SafeAreaView style={styles.safe} edges={["top", "left", "right"]}>
         <ChatHeader title={title} endTime={expiredAt} />
-        <ChatMeter
-          leftTeam={leftTeam}
-          rightTeam={rightTeam}
-          leftCount={leftCount}
-          rightCount={rightCount}
-        />
+        <ChatMeter leftTeam={leftTeam} rightTeam={rightTeam} leftCount={leftCount} rightCount={rightCount} />
         <FlatList
           ref={listRef}
           data={mergedMessages}
@@ -114,34 +96,26 @@ export default function RoomPage(
           keyExtractor={(_, i) => String(i)}
           renderItem={renderItem}
           ListHeaderComponent={
-            isFetchingNextPage
-              ? <View style={{ paddingVertical: 8 }}><ActivityIndicator /></View>
-              : null
+            isFetchingNextPage ? (
+              <View style={{ paddingVertical: 8 }}>
+                <ActivityIndicator />
+              </View>
+            ) : null
           }
           style={{ flex: 1 }}
           contentContainerStyle={{ padding: 16 }}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
-          onEndReached={
-            hasNextPage && !isFetchingNextPage
-              ? () => fetchNextPage()
-              : undefined
-          }
+          onEndReached={hasNextPage && !isFetchingNextPage ? () => fetchNextPage() : undefined}
           onEndReachedThreshold={0.5}
-      />
+        />
         <ChatInput onPlusPress={handleOpen} onSend={handleSendMessage} />
-        <TeamChangeModal
-            roomId={roomId}
-            userId={userId}
-            isOpen={isOpen}
-            handleClose={handleClose}
-            handleTeamChange={handleTeamChange}
-          />
+        <TeamChangeModal roomId={roomId} userId={userId} isOpen={isOpen} handleClose={handleClose} handleTeamChange={handleTeamChange} />
       </SafeAreaView>
     </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: '#050505' },
+  safe: { flex: 1, backgroundColor: "#050505" },
 });
