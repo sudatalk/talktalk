@@ -33,28 +33,27 @@ const RoomList = (props: Props) => {
       </View>
     );
   }
-  if (!data?.length) {
-    return (
-      <View style={styles.emptyContainer}>
-        <Text white h4>
-          토론장이 텅 비었어요
-        </Text>
-        <Text white h4>
-          지금 바로 새 방을 열어보세요!
-        </Text>
-      </View>
-    );
-  }
+
   return (
     <FlatList
-      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="white" />}
+      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#ffffff" />}
       data={data}
       keyExtractor={(item) => item.id.toString()}
       renderItem={({ item }) => <RoomCard room={item} onPress={handleClickJoinButton} />}
-      contentContainerStyle={styles.listContent}
+      contentContainerStyle={data?.length === 0 ? { flex: 1, height: "100%" } : styles.listContent}
       ItemSeparatorComponent={() => <Separator gap={24} />}
       onEndReached={handleEndReached}
       onEndReachedThreshold={0.9}
+      ListEmptyComponent={
+        <View style={styles.emptyContainer}>
+          <Text white h4>
+            토론장이 텅 비었어요
+          </Text>
+          <Text white h4>
+            지금 바로 새 방을 열어보세요!
+          </Text>
+        </View>
+      }
       ListFooterComponent={() => isLoading && <ActivityIndicator />}
       ListFooterComponentStyle={styles.footerComponentsStyle}
     />
@@ -75,6 +74,7 @@ const styles = StyleSheet.create({
 
   emptyContainer: {
     flex: 1,
+    height: "100%",
     justifyContent: "center",
     alignItems: "center",
   },
