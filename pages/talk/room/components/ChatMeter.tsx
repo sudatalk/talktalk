@@ -14,9 +14,6 @@ export default function ChatMeter({ leftTeam, rightTeam, leftCount, rightCount }
   const leftRatio = (leftCount / (leftCount + rightCount)) * 2;
   const rightRatio = (rightCount / (leftCount + rightCount)) * 2;
 
-  console.log("leftRatio : ", leftRatio);
-  console.log("rightRatio : ", rightRatio);
-
   return (
     <View style={styles.container}>
       <View style={styles.topRow}>
