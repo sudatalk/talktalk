@@ -19,7 +19,9 @@ const FONT_SIZE = 16;
 // 플랫폼별 폰트 메트릭 차이 보정: 안드가 살짝 더 큼
 const LINE_HEIGHT = Platform.select({ ios: 20, android: 22 })!;
 
-const MAX_LINES = 3;
+const MAX_INPUT_LINES = 3;
+const MAX_TEXT_LINES = 10;
+const MAX_INPUT_LENGTH = 300;
 const V_PADDING = 10;
 const MIN_LINES = 1;
 
@@ -34,7 +36,16 @@ export default function ChatInput({ onPlusPress, onSend }: Props) {
   ) => {
     const h = e.nativeEvent.contentSize.height;
     const approx = Math.round(h / LINE_HEIGHT) || 1;
-    setLineCount(clamp(approx, MIN_LINES, MAX_LINES));
+    setLineCount(clamp(approx, MIN_LINES, MAX_INPUT_LINES));
+  };
+
+  const handleChangeText = (value: string) => {
+    const lines = value.split('\n');
+    if (lines.length > MAX_TEXT_LINES) {
+      setText(lines.slice(0, MAX_TEXT_LINES).join('\n'));
+    } else {
+      setText(value);
+    }
   };
 
   const innerHeight = LINE_HEIGHT * lineCount;
@@ -64,13 +75,14 @@ export default function ChatInput({ onPlusPress, onSend }: Props) {
         <TextInput
           multiline
           submitBehavior="newline"
+          maxLength={MAX_INPUT_LENGTH}
           style={[
             styles.input,
             { height: innerHeight },
             Platform.OS === "android" ? { includeFontPadding: false as any } : null,
           ]}
           value={text}
-          onChangeText={setText}
+          onChangeText={handleChangeText}
           onContentSizeChange={handleContentSizeChange}
         />
       </View>
