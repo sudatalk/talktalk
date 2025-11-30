@@ -40,7 +40,7 @@ const RoomList = (props: Props) => {
       data={data}
       keyExtractor={(item) => item.id.toString()}
       renderItem={({ item }) => <RoomCard room={item} onPress={handleClickJoinButton} />}
-      contentContainerStyle={data?.length === 0 ? { flex: 1, height: "100%" } : styles.listContent}
+      contentContainerStyle={!data || data?.length === 0 ? { flex: 1, height: "100%" } : styles.listContent}
       ItemSeparatorComponent={() => <Separator gap={24} />}
       onEndReached={handleEndReached}
       onEndReachedThreshold={0.9}

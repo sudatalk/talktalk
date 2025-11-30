@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "talktalk",
+    "name": "토크토크",
     "slug": "talktalk",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/splash-icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
@@ -27,6 +27,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "6c03b3e3-ffed-4245-9da8-63c44fd14aee"
+      }
     }
   }
 }
