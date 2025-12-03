@@ -9,6 +9,7 @@ import { DarkTheme, NavigationContainer } from "@react-navigation/native";
 
 import RootStack from "./RootStack";
 import { useDeviceId } from "./hooks/useDeviceId";
+import Maintenance from "./Maintenance";
 
 const STATUS_BAR_HEIGHT = StatusBar.currentHeight || 24;
 
@@ -27,7 +28,9 @@ export default function App() {
         <GestureHandlerRootView>
           <SafeAreaView style={styles.container}>
             <ExpoStatusBar style="light" />
-            <RootStack />
+            <Maintenance>
+              <RootStack />
+            </Maintenance>
             <Toast />
           </SafeAreaView>
         </GestureHandlerRootView>
