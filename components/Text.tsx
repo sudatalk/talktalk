@@ -12,6 +12,8 @@ type Props = TextProps & {
 
   white?: boolean;
   gray?: boolean;
+
+  center?: boolean;
 };
 
 const Text = (props: Props) => {
@@ -48,5 +50,9 @@ const styles = StyleSheet.create({
 
   bold: {
     fontWeight: 700,
+  },
+
+  center: {
+    textAlign: "center",
   },
 });
