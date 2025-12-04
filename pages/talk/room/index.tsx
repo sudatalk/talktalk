@@ -85,7 +85,7 @@ export default function RoomPage(props: NativeStackScreenProps<RootStackParamsLi
   };
 
   return (
-    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : undefined} keyboardVerticalOffset={Platform.OS === "ios" ? 80 : 0}>
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : "height"} keyboardVerticalOffset={Platform.OS === "ios" ? 80 : 0}>
       <SafeAreaView style={styles.safe} edges={["top", "left", "right"]}>
         <ChatHeader title={title} endTime={expiredAt} />
         <ChatMeter leftTeam={leftTeam} rightTeam={rightTeam} leftCount={leftCount} rightCount={rightCount} />
