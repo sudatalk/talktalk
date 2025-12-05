@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, useRef, useMemo } from "react";
-import { StyleSheet, Platform, KeyboardAvoidingView, FlatList, ActivityIndicator, View } from "react-native";
+import { StyleSheet, FlatList, ActivityIndicator, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ChatHeader from "./components/ChatHeader";
 import ChatMeter from "./components/ChatMeter";
@@ -85,8 +85,7 @@ export default function RoomPage(props: NativeStackScreenProps<RootStackParamsLi
   };
 
   return (
-    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'} keyboardVerticalOffset={Platform.OS === "ios" ? 80 : 60}>
-      <SafeAreaView style={styles.safe} edges={["top", "left", "right"]}>
+      <SafeAreaView style={styles.safe} edges={["top", "left", "right", "bottom"]}>
         <ChatHeader title={title} endTime={expiredAt} />
         <ChatMeter leftTeam={leftTeam} rightTeam={rightTeam} leftCount={leftCount} rightCount={rightCount} />
         <FlatList
@@ -112,7 +111,6 @@ export default function RoomPage(props: NativeStackScreenProps<RootStackParamsLi
         <ChatInput onPlusPress={handleOpen} onSend={handleSendMessage} />
         <TeamChangeModal roomId={roomId} userId={userId} isOpen={isOpen} handleClose={handleClose} handleTeamChange={handleTeamChange} />
       </SafeAreaView>
-    </KeyboardAvoidingView>
   );
 }
 

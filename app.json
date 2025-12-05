@@ -17,12 +17,11 @@
       "bundleIdentifier": "com.ksnd0297.talktalk"
     },
     "android": {
-      "softwareKeyboardLayoutMode": "resize",
       "adaptiveIcon": {
         "foregroundImage": "./assets/splash-icon.png",
         "backgroundColor": "#100f13"
       },
-      "edgeToEdgeEnabled": true,
+      "edgeToEdgeEnabled": false,
       "package": "com.ksnd0297.talktalk"
     },
     "extra": {

@@ -5,7 +5,7 @@ import Backdrop from "./Backdrop";
 
 const DEFAULT_SNAP_POINT = 0;
 
-const SNAP_POINT = ["50%"];
+const SNAP_POINT = ["90%"];
 
 type Props = {
   isOpen: boolean;
@@ -31,6 +31,8 @@ const Modal = (props: Props) => {
   return (
     <BottomSheetModalProvider>
       <BottomSheetModal
+        keyboardBehavior="extend"
+        android_keyboardInputMode="adjustResize"
         backgroundStyle={styles.backgroundStyle}
         handleIndicatorStyle={styles.handleIndicatorStyle}
         ref={bottomSheetRef}
@@ -51,7 +53,7 @@ export default Modal;
 const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
-
+    
     width: "100%",
     height: "100%",
   },
