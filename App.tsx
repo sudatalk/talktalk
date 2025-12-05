@@ -10,8 +10,15 @@ import { DarkTheme, NavigationContainer } from "@react-navigation/native";
 import RootStack from "./RootStack";
 import { useDeviceId } from "./hooks/useDeviceId";
 import Maintenance from "./Maintenance";
+import * as SplashScreen from "expo-splash-screen";
 
 const STATUS_BAR_HEIGHT = StatusBar.currentHeight || 24;
+
+// Set the animation options. This is optional.
+SplashScreen.setOptions({
+  duration: 1000,
+  fade: true,
+});
 
 const queryClient = new QueryClient();
 

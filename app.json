@@ -10,7 +10,7 @@
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#100f13"
     },
     "ios": {
       "supportsTablet": true,
@@ -18,19 +18,25 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/splash-icon.png",
+        "backgroundColor": "#100f13"
       },
       "edgeToEdgeEnabled": false,
       "package": "com.ksnd0297.talktalk"
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
     },
     "extra": {
       "eas": {
         "projectId": "6c03b3e3-ffed-4245-9da8-63c44fd14aee"
       }
-    }
+    },
+    "plugins": [
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#100f13",
+          "image": "./assets/splash-icon.png"
+        }
+      ]
+    ]
   }
 }
