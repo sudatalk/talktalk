@@ -11,8 +11,6 @@ export default function ChatMeter({ leftTeam, rightTeam, leftCount, rightCount }
   const screenWidth = Dimensions.get("window").width;
   const progressBarWidth = screenWidth * 0.5;
 
-  leftCount = 5;
-  rightCount = 3;
   const leftRatio = (leftCount / (leftCount + rightCount)) * 2;
   const rightRatio = (rightCount / (leftCount + rightCount)) * 2;
 
