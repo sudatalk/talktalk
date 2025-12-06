@@ -11,6 +11,8 @@ export default function ChatMeter({ leftTeam, rightTeam, leftCount, rightCount }
   const screenWidth = Dimensions.get("window").width;
   const progressBarWidth = screenWidth * 0.5;
 
+  leftCount = 5;
+  rightCount = 3;
   const leftRatio = (leftCount / (leftCount + rightCount)) * 2;
   const rightRatio = (rightCount / (leftCount + rightCount)) * 2;
 
@@ -23,10 +25,10 @@ export default function ChatMeter({ leftTeam, rightTeam, leftCount, rightCount }
 
         <View style={[styles.progressBarWrapper, { width: progressBarWidth }]}>
           <View style={{ ...styles.barBg, justifyContent: "flex-end" }}>
-            <View style={[styles.barWhite, { flex: leftRatio }]} />
+            <View style={[styles.barWhite, { flex: leftRatio, borderTopLeftRadius: 8, borderBottomLeftRadius: 8 }]} />
           </View>
           <View style={{ ...styles.barBg, justifyContent: "flex-start" }}>
-            <View style={[styles.barGray, { flex: rightRatio }]} />
+            <View style={[styles.barGray, { flex: rightRatio, borderTopRightRadius: 8, borderBottomRightRadius: 8 }]} />
           </View>
         </View>
 
